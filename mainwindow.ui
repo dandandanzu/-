@@ -21,43 +21,43 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {
-    background-color: #E8F5E9;        /* 深墨绿色背景，舒适护眼 */
-    color: #FFEA00;                   /* 亮黄色字体，醒目 */
-    font-family: &quot;Segoe UI&quot;, Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #E8F5E9;        /* 浅绿色背景 */
+    color: #000000;                   /* 黑色字体（新宋体适合深色字） */
+    font-family: &quot;NSimSun&quot;, &quot;SimSun&quot;, serif;  /* 新宋体优先 */
     font-size: 14px;
 }
 
 QMenuBar {
-    background-color: #004B23;        /* 菜单栏深墨绿 */
-    color: #FFEA00;
+    background-color: #A5D6A7;        /* 菜单栏浅绿 */
+    color: #000000;
 }
 
 QMenuBar::item:selected {
-    background-color: #006633;        /* 菜单项悬停更亮的绿 */
+    background-color: #81C784;        /* 菜单项悬停稍深的浅绿 */
 }
 
 QStatusBar {
-    background-color: #004B23;
-    color: #FFEA00;
-    border-top: 1px solid #006633;
+    background-color: #A5D6A7;
+    color: #000000;
+    border-top: 1px solid #81C784;
 }
 
 QToolBar {
-    background-color: #004B23;
+    background-color: #A5D6A7;
     border: none;
 }
 
 QPushButton {
-    background-color: #006633;
-    color: #FFEA00;
-    border: 1px solid #009933;
+    background-color: #81C784;
+    color: #000000;
+    border: 1px solid #66BB6A;
     border-radius: 5px;
     padding: 5px 12px;
     font-weight: bold;
 }
 
 QPushButton:hover {
-    background-color: #009933;
+    background-color: #66BB6A;
 }
 
 QPushButton:pressed {
@@ -65,49 +65,49 @@ QPushButton:pressed {
 }
 
 QLineEdit, QTextEdit, QPlainTextEdit {
-    background-color: #004B23;
-    color: #FFEA00;
-    border: 1px solid #009933;
+    background-color: #E8F5E9;        /* 输入框浅色背景 */
+    color: #000000;
+    border: 1px solid #81C784;
     border-radius: 4px;
     padding: 4px;
-    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;, monospace;
+    font-family: &quot;NSimSun&quot;, &quot;SimSun&quot;, serif;
 }
 
 QHeaderView::section {
-    background-color: #006633;
-    color: #FFEA00;
+    background-color: #81C784;
+    color: #000000;
     padding: 4px;
-    border: 1px solid #009933;
+    border: 1px solid #66BB6A;
 }
 
 QTableView {
-    background-color: #003319;
-    color: #FFEA00;
-    gridline-color: #009933;
+    background-color: #E8F5E9;       /* 表格浅色背景 */
+    color: #000000;
+    gridline-color: #81C784;
 }
 
 QScrollBar:vertical {
-    background-color: #004B23;
+    background-color: #A5D6A7;
     width: 14px;
     margin: 15px 3px 15px 3px;
-    border: 1px solid #009933;
+    border: 1px solid #81C784;
     border-radius: 7px;
 }
 
 QScrollBar::handle:vertical {
-    background-color: #009933;
+    background-color: #81C784;
     min-height: 20px;
     border-radius: 7px;
 }
 
 QScrollBar::handle:vertical:hover {
-    background-color: #00CC44;
+    background-color: #66BB6A;
 }
 
 QGroupBox {
-    background-color: #E8F5E9;  /* 与输入框一致的深墨绿背景 */
-    color: #FFEA00;             /* 亮黄色字体 */
-    border: 2px solid #009933;
+    background-color: #E8F5E9;       /* 浅绿背景 */
+    color: #000000;                  /* 黑色字体 */
+    border: 2px solid #81C784;
     border-radius: 5px;
     margin-top: 10px;
     font-weight: bold;
@@ -118,32 +118,31 @@ QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top center;
     padding: 0 3px;
-    color: #000000;             /* 标题字体为黑色 */
+    color: #000000;                  /* 标题黑色 */
 }
 
 QComboBox {
-    background-color: #E8F5E9;     /* 淡绿背景 */
-    color: #000000;                /* 黑色字体 */
-    border: 1px solid #009933;     /* 深绿边框 */
+    background-color: #E8F5E9;       /* 浅绿背景 */
+    color: #000000;
+    border: 1px solid #81C784;
     border-radius: 4px;
     padding: 4px;
 }
 
 QComboBox QAbstractItemView {
-    background-color: #F0FFF0;     /* 下拉框背景浅绿 */
-    color: #000000;                /* 下拉项字体 */
-    selection-background-color: #B2FF59; /* 被选中项背景亮绿 */
-    selection-color: #000000;      /* 被选中项字体 */
+    background-color: #F0FFF0;       /* 下拉框更浅绿 */
+    color: #000000;
+    selection-background-color: #C8E6C9; /* 选中项浅绿 */
+    selection-color: #000000;
 }
 
 QComboBox:hover {
-    border: 1px solid #33CC66;
+    border: 1px solid #66BB6A;
 }
 
 QComboBox:focus {
-    border: 2px solid #66BB6A;
-}
-</string>
+    border: 2px solid #4CAF50;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox">
@@ -394,7 +393,7 @@ QComboBox:focus {
    </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -436,7 +435,7 @@ QComboBox:focus {
        <rect>
         <x>10</x>
         <y>60</y>
-        <width>360</width>
+        <width>381</width>
         <height>301</height>
        </rect>
       </property>
@@ -464,7 +463,7 @@ QComboBox:focus {
       <widget class="QPushButton" name="pushButton_108">
        <property name="geometry">
         <rect>
-         <x>70</x>
+         <x>80</x>
          <y>250</y>
          <width>75</width>
          <height>30</height>
@@ -506,7 +505,7 @@ QComboBox:focus {
       <widget class="QPushButton" name="pushButton_109">
        <property name="geometry">
         <rect>
-         <x>200</x>
+         <x>220</x>
          <y>250</y>
          <width>75</width>
          <height>30</height>
@@ -548,9 +547,9 @@ QComboBox:focus {
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>11</x>
-         <y>28</y>
-         <width>343</width>
+         <x>3</x>
+         <y>27</y>
+         <width>371</width>
          <height>211</height>
         </rect>
        </property>
@@ -567,13 +566,13 @@ QComboBox:focus {
             </property>
             <property name="minimumSize">
              <size>
-              <width>135</width>
+              <width>145</width>
               <height>35</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>135</width>
+              <width>145</width>
               <height>35</height>
              </size>
             </property>
@@ -593,7 +592,7 @@ QComboBox:focus {
           <item>
            <widget class="QLineEdit" name="lineEdit_7">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -615,7 +614,7 @@ QComboBox:focus {
             </property>
             <property name="font">
              <font>
-              <family>Consolas</family>
+              <family>NSimSun</family>
               <pointsize>13</pointsize>
              </font>
             </property>
@@ -709,13 +708,13 @@ QComboBox:focus {
             </property>
             <property name="minimumSize">
              <size>
-              <width>135</width>
+              <width>145</width>
               <height>35</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>135</width>
+              <width>145</width>
               <height>35</height>
              </size>
             </property>
@@ -841,13 +840,13 @@ QComboBox:focus {
             </property>
             <property name="minimumSize">
              <size>
-              <width>135</width>
+              <width>145</width>
               <height>35</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>135</width>
+              <width>145</width>
               <height>35</height>
              </size>
             </property>
@@ -886,7 +885,7 @@ QComboBox:focus {
             </property>
             <property name="font">
              <font>
-              <family>Consolas</family>
+              <family>NSimSun</family>
               <pointsize>13</pointsize>
              </font>
             </property>
@@ -980,13 +979,13 @@ QComboBox:focus {
             </property>
             <property name="minimumSize">
              <size>
-              <width>135</width>
+              <width>145</width>
               <height>35</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>135</width>
+              <width>145</width>
               <height>35</height>
              </size>
             </property>
@@ -1025,7 +1024,7 @@ QComboBox:focus {
             </property>
             <property name="font">
              <font>
-              <family>Consolas</family>
+              <family>NSimSun</family>
               <pointsize>13</pointsize>
              </font>
             </property>
@@ -1119,13 +1118,13 @@ QComboBox:focus {
             </property>
             <property name="minimumSize">
              <size>
-              <width>135</width>
+              <width>145</width>
               <height>35</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>135</width>
+              <width>145</width>
               <height>35</height>
              </size>
             </property>
@@ -1164,7 +1163,7 @@ QComboBox:focus {
             </property>
             <property name="font">
              <font>
-              <family>Consolas</family>
+              <family>NSimSun</family>
               <pointsize>13</pointsize>
              </font>
             </property>
@@ -1254,7 +1253,7 @@ QComboBox:focus {
        <rect>
         <x>10</x>
         <y>370</y>
-        <width>431</width>
+        <width>441</width>
         <height>319</height>
        </rect>
       </property>
@@ -1305,7 +1304,7 @@ QComboBox:focus {
             <enum>Qt::RightToLeft</enum>
            </property>
            <property name="text">
-            <string>          0~100  内码    uA</string>
+            <string>           0~100   内码   uA</string>
            </property>
           </widget>
           <widget class="QLineEdit" name="lineEdit_13">
@@ -1317,7 +1316,7 @@ QComboBox:focus {
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1338,7 +1337,7 @@ QComboBox:focus {
           </property>
           <property name="maximumSize">
            <size>
-            <width>388</width>
+            <width>407</width>
             <height>35</height>
            </size>
           </property>
@@ -1386,19 +1385,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>30</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>50</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1421,19 +1420,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1453,19 +1452,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
              <underline>false</underline>
             </font>
@@ -1555,19 +1554,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>30</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>50</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1590,19 +1589,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1622,19 +1621,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1726,19 +1725,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>50</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>50</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1761,19 +1760,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1793,19 +1792,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1894,19 +1893,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>50</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>50</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1929,19 +1928,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -1961,19 +1960,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -2062,19 +2061,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>50</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>50</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -2097,19 +2096,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -2129,19 +2128,19 @@ QComboBox:focus {
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>63</width>
              <height>23</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>13</pointsize>
             </font>
            </property>
@@ -2261,7 +2260,13 @@ QComboBox:focus {
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true"/>
+            <string notr="true">QPushButton {
+    background-color: #9575CD;  /* 柔和的薰衣草紫 */
+    border: 1px solid #7E57C2;
+    color: #000000;
+}
+QPushButton:hover { background-color: #7E57C2; }
+QPushButton:pressed { background-color: #673AB7; }</string>
            </property>
            <property name="text">
             <string>保存</string>
@@ -2326,7 +2331,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2352,7 +2357,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2468,7 +2473,13 @@ QComboBox:focus {
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true"/>
+           <string notr="true">QPushButton {
+    background-color: #9575CD;  /* 柔和的薰衣草紫 */
+    border: 1px solid #7E57C2;
+    color: #000000;
+}
+QPushButton:hover { background-color: #7E57C2; }
+QPushButton:pressed { background-color: #673AB7; }</string>
           </property>
           <property name="text">
            <string>保存</string>
@@ -2539,7 +2550,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2575,7 +2586,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2601,7 +2612,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2663,7 +2674,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2689,7 +2700,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2751,7 +2762,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2777,7 +2788,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2839,7 +2850,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2865,7 +2876,7 @@ QComboBox:focus {
           </property>
           <property name="font">
            <font>
-            <family>Consolas</family>
+            <family>NSimSun</family>
             <pointsize>13</pointsize>
            </font>
           </property>
@@ -2909,9 +2920,9 @@ QComboBox:focus {
      <widget class="QGroupBox" name="groupBox_5">
       <property name="geometry">
        <rect>
-        <x>420</x>
+        <x>403</x>
         <y>60</y>
-        <width>494</width>
+        <width>511</width>
         <height>299</height>
        </rect>
       </property>
@@ -3375,7 +3386,7 @@ QComboBox:focus {
                </property>
                <property name="font">
                 <font>
-                 <family>Consolas</family>
+                 <family>NSimSun</family>
                  <pointsize>13</pointsize>
                 </font>
                </property>
@@ -3444,7 +3455,7 @@ QComboBox:focus {
                </property>
                <property name="font">
                 <font>
-                 <family>Consolas</family>
+                 <family>NSimSun</family>
                  <pointsize>13</pointsize>
                 </font>
                </property>
@@ -3523,7 +3534,7 @@ QComboBox:focus {
                </property>
                <property name="font">
                 <font>
-                 <family>Consolas</family>
+                 <family>NSimSun</family>
                  <pointsize>13</pointsize>
                 </font>
                </property>
@@ -3592,7 +3603,7 @@ QComboBox:focus {
                </property>
                <property name="font">
                 <font>
-                 <family>Consolas</family>
+                 <family>NSimSun</family>
                  <pointsize>13</pointsize>
                 </font>
                </property>
@@ -3662,7 +3673,7 @@ QComboBox:focus {
                </property>
                <property name="font">
                 <font>
-                 <family>Consolas</family>
+                 <family>NSimSun</family>
                  <pointsize>13</pointsize>
                 </font>
                </property>
@@ -3731,7 +3742,7 @@ QComboBox:focus {
                </property>
                <property name="font">
                 <font>
-                 <family>Consolas</family>
+                 <family>NSimSun</family>
                  <pointsize>13</pointsize>
                 </font>
                </property>
@@ -3903,7 +3914,7 @@ QComboBox:focus {
                </property>
                <property name="font">
                 <font>
-                 <family>Consolas</family>
+                 <family>NSimSun</family>
                  <pointsize>13</pointsize>
                 </font>
                </property>
@@ -3969,7 +3980,7 @@ QComboBox:focus {
                </property>
                <property name="font">
                 <font>
-                 <family>Consolas</family>
+                 <family>NSimSun</family>
                  <pointsize>13</pointsize>
                 </font>
                </property>
@@ -4038,7 +4049,7 @@ QComboBox:focus {
               </property>
               <property name="font">
                <font>
-                <family>Consolas</family>
+                <family>NSimSun</family>
                 <pointsize>13</pointsize>
                </font>
               </property>
@@ -4104,7 +4115,7 @@ QComboBox:focus {
               </property>
               <property name="font">
                <font>
-                <family>Consolas</family>
+                <family>NSimSun</family>
                 <pointsize>13</pointsize>
                </font>
               </property>
@@ -4162,7 +4173,13 @@ QComboBox:focus {
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true"/>
+             <string notr="true">QPushButton {
+    background-color: #9575CD;  /* 柔和的薰衣草紫 */
+    border: 1px solid #7E57C2;
+    color: #000000;
+}
+QPushButton:hover { background-color: #7E57C2; }
+QPushButton:pressed { background-color: #673AB7; }</string>
             </property>
             <property name="text">
              <string>写入</string>
@@ -4178,7 +4195,7 @@ QComboBox:focus {
       <property name="geometry">
        <rect>
         <x>460</x>
-        <y>570</y>
+        <y>500</y>
         <width>94</width>
         <height>35</height>
        </rect>
@@ -4206,7 +4223,7 @@ QComboBox:focus {
       <property name="geometry">
        <rect>
         <x>460</x>
-        <y>510</y>
+        <y>440</y>
         <width>94</width>
         <height>35</height>
        </rect>
@@ -4233,8 +4250,8 @@ QComboBox:focus {
      <widget class="QPushButton" name="pushButton_37">
       <property name="geometry">
        <rect>
-        <x>460</x>
-        <y>440</y>
+        <x>390</x>
+        <y>10</y>
         <width>94</width>
         <height>35</height>
        </rect>
@@ -4252,7 +4269,13 @@ QComboBox:focus {
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">QPushButton {
+    background-color: #9575CD;  /* 柔和的薰衣草紫 */
+    border: 1px solid #7E57C2;
+    color: #000000;
+}
+QPushButton:hover { background-color: #7E57C2; }
+QPushButton:pressed { background-color: #673AB7; }</string>
       </property>
       <property name="text">
        <string>一键读取</string>
@@ -4314,7 +4337,13 @@ QComboBox:focus {
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">QPushButton {
+    background-color: #9575CD;  /* 柔和的薰衣草紫 */
+    border: 1px solid #7E57C2;
+    color: #000000;
+}
+QPushButton:hover { background-color: #7E57C2; }
+QPushButton:pressed { background-color: #673AB7; }</string>
       </property>
       <property name="text">
        <string>变送模式</string>
@@ -4337,6 +4366,7 @@ QComboBox:focus {
       </property>
       <property name="font">
        <font>
+        <family>新宋体</family>
         <pointsize>18</pointsize>
         <bold>true</bold>
        </font>
@@ -4345,7 +4375,7 @@ QComboBox:focus {
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>OPa校正</string>
+       <string>0Pa校正</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_26">
@@ -4430,6 +4460,46 @@ QComboBox:focus {
       </property>
       <property name="text">
        <string>0V~10V</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_15">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>10</y>
+        <width>85</width>
+        <height>38</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>85</width>
+        <height>38</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>85</width>
+        <height>38</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>NSimSun</family>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </widget>
@@ -4655,7 +4725,7 @@ QComboBox:focus {
      </property>
      <property name="font">
       <font>
-       <family>Consolas</family>
+       <family>NSimSun</family>
        <pointsize>13</pointsize>
       </font>
      </property>
@@ -4698,62 +4768,6 @@ QComboBox:focus {
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="pushButton_23">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>630</y>
-      <width>94</width>
-      <height>35</height>
-     </rect>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>16777215</width>
-      <height>16777215</height>
-     </size>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>电压读取</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_24">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>680</y>
-      <width>94</width>
-      <height>35</height>
-     </rect>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>16777215</width>
-      <height>16777215</height>
-     </size>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>电流读取</string>
-    </property>
-   </widget>
    <widget class="QPlainTextEdit" name="plainTextEdit">
     <property name="geometry">
      <rect>
@@ -4789,43 +4803,6 @@ QPlainTextEdit:hover {
     </property>
     <property name="plainText">
      <string>         监测数据</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_15">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>720</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>待发送个数</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_12">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>750</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Consolas</family>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>0</string>
     </property>
    </widget>
    <widget class="QFrame" name="frame">
@@ -5044,7 +5021,7 @@ QPlainTextEdit:hover {
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>10</pointsize>
              <bold>true</bold>
             </font>
@@ -5077,7 +5054,7 @@ border: none;  /* 去掉边框 */}
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>10</pointsize>
              <bold>true</bold>
             </font>
@@ -5110,7 +5087,7 @@ border: none;  /* 去掉边框 */}
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>10</pointsize>
              <bold>true</bold>
             </font>
@@ -5144,7 +5121,7 @@ border: none;  /* 去掉边框 */}
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>10</pointsize>
              <bold>true</bold>
             </font>
@@ -5177,7 +5154,7 @@ border: none;  /* 去掉边框 */}
            </property>
            <property name="font">
             <font>
-             <family>Consolas</family>
+             <family>NSimSun</family>
              <pointsize>10</pointsize>
              <bold>true</bold>
             </font>
@@ -5208,7 +5185,7 @@ border: none;  /* 去掉边框 */}
        </property>
        <property name="font">
         <font>
-         <family>Consolas</family>
+         <family>NSimSun</family>
          <pointsize>70</pointsize>
          <bold>true</bold>
         </font>

@@ -54,6 +54,8 @@ public:
 
     bool isFloat              = false;
 
+    int timeoutTimes;
+
     struct RegisterInfo {
         QString name;
         QString address;
@@ -131,6 +133,7 @@ public:
     QMap<QString, QString> sensorListMap;
     QMap<QString, QString> transmissionMethodListMap;
     QMap<QString, QString> baudMap;
+    QMap<QString, QString> voltageBaudMap;
 
     // 参数配置
     QLineEdit *LineEditID           = nullptr,
@@ -207,8 +210,6 @@ public:
 
     void serialRefreshInit();
 
-    //void registerListInit();
-
     void appendToTextEdit(SerialPortState state, const QString &address, const QString &value);
 
     void serialRead(SerialPortID id, QString address, QString length);
@@ -238,6 +239,8 @@ public:
     void setTransmissionMethod(QPushButton *button);
 
     void currentTransmissionMethod(const QString &arg1);
+
+    void queueClear();
 
 private slots:
     void on_pushButton_clicked();
@@ -332,9 +335,7 @@ private slots:
 
     void on_pushButton_11_clicked();
 
-    void on_pushButton_23_clicked();
-
-    void on_pushButton_24_clicked();
+    void pointerInit();
 
     void autoDequeueSolt();
 

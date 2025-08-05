@@ -6,10 +6,9 @@
 #include <QScrollBar>
 #include "crc.h"
 
-#define SecondByte_04       0x04
-#define SecondByte_06       0x06
-#define LengthByte_00       0x00
-#define LengthByte_01       0x01
+#define SecondByte_06   0x06
+#define LengthByte_00   0x00
+#define LengthByte_01   0x01
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,9 +23,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 界面初始化
     interfaceInit();
-
-    // 刷新寄存器列表
-    //registerListInit();
 
     // 传感器串口接收槽函数
     connect(&sensorSerial, &QSerialPort::readyRead, this, &MainWindow::sensorSerialDelay);
@@ -61,48 +57,6 @@ void MainWindow::serialRefreshInit()
     on_pushButton_3_clicked();            // 万用表串口刷新
     on_pushButton_5_clicked();            // 气压仪串口刷新
 }
-
-// void MainWindow::registerListInit()
-// {
-//     // 表头设置
-//     QStringList headers = {"读取寄存器", "寄存器", "地址", "数量", "类型", "值", "描述"};
-//     ui->tableWidget->setColumnCount(headers.size());
-//     ui->tableWidget->setHorizontalHeaderLabels(headers);
-
-    // 设置行数
-    //ui->tableWidget->setRowCount(registerList.size());
-
-    // 添加数据到表格
-    // for (int i = 0; i < registerList.size(); ++i) {
-
-    //     // 添加按钮
-    //     QPushButton *btn = new QPushButton("读取");
-    //     btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    //     btn->setStyleSheet(R"(
-    //         QPushButton:pressed {
-    //             background-color:rgba(0,255,0);
-    //         }
-    //     )");
-    //     ui->tableWidget->setCellWidget(i, 0, btn);
-
-    //     // 添加信息
-    //     const RegisterInfo &reg = registerList[i];
-    //     ui->tableWidget->setItem(i, 1, new QTableWidgetItem(reg.name));
-    //     ui->tableWidget->setItem(i, 2, new QTableWidgetItem(reg.address));
-    //     ui->tableWidget->setItem(i, 3, new QTableWidgetItem(reg.count));
-    //     ui->tableWidget->setItem(i, 4, new QTableWidgetItem(reg.type));
-    //     ui->tableWidget->setItem(i, 5, new QTableWidgetItem(reg.value));
-    //     ui->tableWidget->setItem(i, 6, new QTableWidgetItem(reg.description));
-
-    //     // 连接按钮点击事件
-    //     connect(btn, &QPushButton::clicked, this, [=]() {
-    //         qDebug()<<"读取成功";
-    //     });
-    // }
-
-    // // 自动根据内容调整列宽
-    // ui->tableWidget->resizeColumnsToContents();
-// }
 
 // 窗口更新,
 void MainWindow::appendToTextEdit(SerialPortState state, const QString &address, const QString &value)
@@ -139,17 +93,19 @@ void MainWindow::serialRead(SerialPortID id, QString address, QString length)
             QByteArray lengthBytes = QByteArray::fromHex(length.toUtf8());
 
             // 电流型设备ID固定为01，电压型可变
-            int strID;
+            int strID, functionCode;
             if (ui->label_25->text() == "uA") {
                 strID = 01;
+                functionCode = 04;
             } else {
                 strID = ui->lineEdit_7->text().toInt();
+                functionCode = 05;
             }
 
             // 构造完整帧
             QByteArray frame;
-            frame.append(strID);           // 固定头1
-            frame.append(static_cast<char>(SecondByte_04));         // 固定头2
+            frame.append(strID);                // 固定头1
+            frame.append(functionCode);         // 固定头2
             frame.append(addressBytes[0]);          // 地址尾1
             frame.append(addressBytes[1]);          // 地址尾2
             frame.append(static_cast<char>(LengthByte_00));         // 固定尾1
@@ -201,7 +157,7 @@ void MainWindow::serialWrite(SerialPortID id, QString address, QString data)
             }
 
             // 构造完整帧
-            QByteArray frame;
+            QByteArray frame;            
 
             // 如果写入数据是float型
             if (isFloat) {
@@ -304,7 +260,7 @@ void MainWindow::sensorSerialRead()
     // 收到 06 或者 10 显示写入成功，否则是收到 04 代表读取
     if (static_cast<quint8>(data[1]) == 0x06 || static_cast<quint8>(data[1]) == 0x10) {
         appendToTextEdit(Receive, "", "写入成功");
-    } else if (static_cast<quint8>(data[1]) == 0x04) {
+    } else if (static_cast<quint8>(data[1]) == 0x04 || static_cast<quint8>(data[1]) == 0x05) {
         // 1、数据长度为2，2、数据长度为4
         if (static_cast<quint8>(data[2]) == 0x02) {
             // 解析数据
@@ -640,8 +596,15 @@ void MainWindow::barographSerialRead()
 
 void MainWindow::interfaceInit()
 {
+    // 超时次数为0
+    timeoutTimes = 0;
     // 设备ID初始化为FF
     ui->lineEdit_7->setText("255");
+
+    // 0Pa校正不显示
+    ui->lineEdit_15->hide();
+    ui->pushButton_35->hide();
+    ui->pushButton_36->hide();
 
     // 电流标定的占空比显示
     ui->lineEdit_27->setText("17");
@@ -706,10 +669,24 @@ void MainWindow::interfaceInit()
         {"115200", "8"},
     };
 
+    voltageBaudMap = {
+        {"1200",   "0"},
+        {"2400",   "1"},
+        {"4800",   "2"},
+        {"9600",   "3"},
+        {"19200",  "4"},
+        {"38400",  "5"},
+        {"57600",  "6"},
+        {"115200", "7"},
+    };
+
     // 波特率列表
     for (auto it = baudMap.constBegin(); it != baudMap.constEnd(); ++it) {
         ui->comboBox_6->addItem(it.key());  // 显示型号，绑定ID
     }
+
+    // tabwidget失能
+    ui->tabWidget->setEnabled(false);
 }
 
 // 延时函数
@@ -727,8 +704,6 @@ void MainWindow::autoScan()
         autoScanTimer.stop();
         return;
     }
-    // 当前队列数量
-    ui->lineEdit_12->setText(QString::number(functionQueue.size()));
 
     // 如果队列不是空的，返回
     if (!functionQueue.isEmpty()) return;
@@ -769,6 +744,7 @@ void MainWindow::autoScan()
         pressureUnit = true;
         serialRead(Portsensor, "0012", "01");
     });
+    ui->pushButton_22->setStyleSheet("background-color: #00BFFF;");
 }
 
 // 关闭事件
@@ -779,7 +755,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         sensorSerial.close();
     }
     // 清空队列
-    functionQueue.clear();
+    queueClear();
     // 关闭自动扫描时间
     if (autoDequeueTimer.isActive()) {
         autoDequeueTimer.stop();
@@ -865,14 +841,13 @@ void MainWindow::on_pushButton_2_clicked()
         ui->tabWidget->setEnabled(true);
 
         // 清空队列
-        functionQueue.clear();
-        ui->lineEdit_12->setText(QString::number(functionQueue.size()));
+        queueClear();
         if (waitingResponseTimer.isActive()) {
             waitingResponseTimer.stop();
         }
 
         // 开启自动出队定时器
-        autoDequeueTimer.start(100);
+        autoDequeueTimer.start(150);
     }
     else {
         sensorSerial.close();
@@ -883,7 +858,7 @@ void MainWindow::on_pushButton_2_clicked()
         ui->comboBox->setEnabled(true);
         ui->pushButton->setEnabled(true);
         ui->tabWidget->setEnabled(false);
-        functionQueue.clear();
+        queueClear();
         autoDequeueTimer.stop();
     }
 }
@@ -977,30 +952,56 @@ void MainWindow::on_pushButton_7_clicked()
 void MainWindow::on_pushButton_35_clicked()
 {
     if (!(QMessageBox::information(this, "警告", "是否要重启设备", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)) return;
-    serialWrite(Portsensor, "000E", "C381");
-    appendToTextEdit(Write, "恢复出厂设置命令", "恢复出厂设置");
+
+    if (ui->label_25->text() == "uA") {
+        functionQueue.prepend([this]() {
+            serialWrite(Portsensor, "000E", "C381");
+            appendToTextEdit(Write, "恢复出厂设置命令", "恢复出厂设置");
+        });
+    } else if (ui->label_25->text() == "mV") {
+        functionQueue.prepend([this]() {
+            serialWrite(Portsensor, "0010", "01");
+            appendToTextEdit(Write, "恢复出厂设置命令", "恢复出厂设置");
+        });
+    }
 }
 
 // 读设备地址
 void MainWindow::on_pushButton_12_clicked()
 {
     // 插队进入
-    functionQueue.prepend([this]() {
-        LineEditID = ui->lineEdit_7;
-        serialRead(Portsensor, "0010", "01");
-        appendToTextEdit(Read, "设备地址", "");
-    });
+    if (ui->label_25->text() == "uA") {
+        functionQueue.prepend([this]() {
+            LineEditID = ui->lineEdit_7;
+            serialRead(Portsensor, "0010", "01");
+            appendToTextEdit(Read, "设备地址", "");
+        });
+    } else if (ui->label_25->text() == "mV") {
+        functionQueue.prepend([this]() {
+            LineEditID = ui->lineEdit_7;
+            serialRead(Portsensor, "0000", "01");
+            appendToTextEdit(Read, "设备地址", "");
+        });
+    }
 }
 
 // 读波特率
 void MainWindow::on_pushButton_14_clicked()
 {
     // 插队进入
-    functionQueue.prepend([this]() {
-        ComboBoxBaud = ui->comboBox_6;
-        serialRead(Portsensor, "0011", "01");
-        appendToTextEdit(Read, "波特率", "");
-    });
+    if (ui->label_25->text() == "uA") {
+        functionQueue.prepend([this]() {
+            ComboBoxBaud = ui->comboBox_6;
+            serialRead(Portsensor, "0011", "01");
+            appendToTextEdit(Read, "波特率", "");
+        });
+    } else if (ui->label_25->text() == "mV") {
+        functionQueue.prepend([this]() {
+            ComboBoxBaud = ui->comboBox_6;
+            serialRead(Portsensor, "0001", "01");
+            appendToTextEdit(Read, "波特率", "");
+        });
+    }
 }
 
 // 读电流下限
@@ -1056,9 +1057,10 @@ void MainWindow::on_pushButton_36_clicked()
 void MainWindow::on_pushButton_37_clicked()
 {
     autoScanTimer.stop();
-
     // 清除队列
-    functionQueue.clear();
+    queueClear();
+
+    ui->pushButton_37->setEnabled(false);
 
     // 读取固件版本
     functionQueue.enqueue([this]() {
@@ -1119,18 +1121,34 @@ void MainWindow::on_pushButton_37_clicked()
     });
 
     // 设备地址
-    functionQueue.enqueue([this]() {
-        LineEditID = ui->lineEdit_7;
-        serialRead(Portsensor, "0010", "01");
-        appendToTextEdit(Read, "设备地址", "");
-    });
+    if (ui->label_25->text() == "uA") {
+        functionQueue.enqueue([this]() {
+            LineEditID = ui->lineEdit_7;
+            serialRead(Portsensor, "0010", "01");
+            appendToTextEdit(Read, "设备地址", "");
+        });
+    } else if (ui->label_25->text() == "mV") {
+        functionQueue.enqueue([this]() {
+            LineEditID = ui->lineEdit_7;
+            serialRead(Portsensor, "0000", "01");
+            appendToTextEdit(Read, "设备地址", "");
+        });
+    }
 
     // 波特率
-    functionQueue.enqueue([this]() {
-        ComboBoxBaud = ui->comboBox_6;
-        serialRead(Portsensor, "0011", "01");
-        appendToTextEdit(Read, "波特率", "");
-    });
+    if (ui->label_25->text() == "uA") {
+        functionQueue.enqueue([this]() {
+            ComboBoxBaud = ui->comboBox_6;
+            serialRead(Portsensor, "0011", "01");
+            appendToTextEdit(Read, "波特率", "");
+        });
+    } else if (ui->label_25->text() == "mV") {
+        functionQueue.enqueue([this]() {
+            ComboBoxBaud = ui->comboBox_6;
+            serialRead(Portsensor, "0001", "01");
+            appendToTextEdit(Read, "波特率", "");
+        });
+    }
 
     // 读电流下限
     functionQueue.enqueue([this]() {
@@ -1152,11 +1170,6 @@ void MainWindow::on_pushButton_37_clicked()
         serialRead(Portsensor, "001B", "01");
         appendToTextEdit(Read, "零点跟踪", "");
     });
-
-    // 读传感器配置
-    // delay(2000);
-    // ui->pushButton_33->click();
-
 
     // 插队读传感器型号
     functionQueue.enqueue([this]() {
@@ -1241,9 +1254,12 @@ void MainWindow::on_pushButton_37_clicked()
         appendToTextEdit(Read, "传感器变送满度（Pa）", "");
     });
 
-    // // 读取电流标定
-    // delay(2000);
-    // ui->pushButton_49->click();
+    // 读取电流标定点数
+    functionQueue.enqueue([this]() {
+        LineEditCurrentCalibrationNum = ui->lineEdit_13;
+        serialRead(Portsensor, "0041", "01");
+        appendToTextEdit(Read, "电流标定点数", "");
+    });
 
     // 读取电流标定点1电流uA
     functionQueue.enqueue([this]() {
@@ -1315,11 +1331,13 @@ void MainWindow::on_pushButton_37_clicked()
         appendToTextEdit(Read, "电流标定内码5", "");
     });
 
-    // // 读传感器标定
-    // delay(2000);
-    // ui->pushButton_75->click();
-    // delay(200);
-    // 读传感器标定点1Pa
+    // 读传感器标定点数
+    functionQueue.enqueue([this]() {
+        LineEditSensorCalibrationNum = ui->lineEdit_14;
+        serialRead(Portsensor, "0050", "01");
+        appendToTextEdit(Read, "传感器标定点数", "");
+    });
+
     functionQueue.enqueue([this]() {
         isFloat = true;
         serialRead(Portsensor, "0032", "02");
@@ -1395,10 +1413,11 @@ void MainWindow::on_pushButton_37_clicked()
         serialRead(Portsensor, "005B", "02");
         LineEditSensorInternalCode5 = ui->lineEdit_66;
         appendToTextEdit(Read, "传感器标定点5内码", "");
+        // 可以读取
+        ui->pushButton_37->setEnabled(true);
+        // 开启自动扫描定时器
+        autoScanTimer.start(ui->lineEdit_8->text().toInt());
     });
-
-    // 开启自动扫描定时器
-    autoScanTimer.start(ui->lineEdit_8->text().toInt());
 }
 
 // 读取传感器配置
@@ -1410,7 +1429,9 @@ void MainWindow::on_pushButton_33_clicked()
     }
 
     // 清除队列
-    functionQueue.clear();
+    queueClear();
+
+    ui->pushButton_33->setEnabled(false);
 
     // 插队读传感器型号
     functionQueue.enqueue([this]() {
@@ -1493,10 +1514,10 @@ void MainWindow::on_pushButton_33_clicked()
         LineEditEndPointPa = ui->lineEdit_26;
         serialRead(Portsensor, "0019", "02");
         appendToTextEdit(Read, "传感器变送满度（Pa）", "");
+        // 开启自动扫描定时器
+        autoScanTimer.start(ui->lineEdit_8->text().toInt());
+        ui->pushButton_33->setEnabled(true);
     });
-
-    // 开启自动扫描定时器
-    autoScanTimer.start(ui->lineEdit_8->text().toInt());
 }
 
 // 写入变送起点和变送满度
@@ -1597,7 +1618,6 @@ void MainWindow::on_pushButton_46_clicked()
         serialRead(Portsensor, "0041", "01");
         appendToTextEdit(Read, "电流标定点数", "");
     });
-
 }
 
 // 电流标定点2
@@ -1687,7 +1707,9 @@ void MainWindow::on_pushButton_49_clicked()
     }
 
     // 清除队列
-    functionQueue.clear();
+    queueClear();
+
+    ui->pushButton_49->setEnabled(false);
 
     // 读取电流标定点1电流uA
     functionQueue.enqueue([this]() {
@@ -1695,7 +1717,6 @@ void MainWindow::on_pushButton_49_clicked()
         LineEditCurrentCalibration1 = ui->lineEdit_37;
         appendToTextEdit(Read, "电流标定点1", "");
     });
-    delay(150);
 
     // 读取电流标定点1对应PWM定时器计数值
     functionQueue.enqueue([this]() {
@@ -1703,7 +1724,6 @@ void MainWindow::on_pushButton_49_clicked()
         LineEditInternalCode1 = ui->lineEdit_32;
         appendToTextEdit(Read, "电流标定内码1", "");
     });
-    delay(150);
 
     // 读取电流标定点2电流uA
     functionQueue.enqueue([this]() {
@@ -1711,7 +1731,6 @@ void MainWindow::on_pushButton_49_clicked()
         LineEditCurrentCalibration2 = ui->lineEdit_41;
         appendToTextEdit(Read, "电流标定内码5", "");
     });
-    delay(150);
 
     // 读取电流标定点2对应PWM定时器计数值
     functionQueue.enqueue([this]() {
@@ -1719,7 +1738,6 @@ void MainWindow::on_pushButton_49_clicked()
         LineEditInternalCode2 = ui->lineEdit_33;
         appendToTextEdit(Read, "电流标定内码2", "");
     });
-    delay(150);
 
     // 读取电流标定点3电流uA
     functionQueue.enqueue([this]() {
@@ -1727,7 +1745,6 @@ void MainWindow::on_pushButton_49_clicked()
         LineEditCurrentCalibration3 = ui->lineEdit_40;
         appendToTextEdit(Read, "电流标定点3", "");
     });
-    delay(150);
 
     // 读取电流标定点3对应PWM定时器计数值
     functionQueue.enqueue([this]() {
@@ -1735,7 +1752,6 @@ void MainWindow::on_pushButton_49_clicked()
         LineEditInternalCode3 = ui->lineEdit_34;
         appendToTextEdit(Read, "电流标定内码3", "");
     });
-    delay(150);
 
     // 读取电流标定点4电流uA
     functionQueue.enqueue([this]() {
@@ -1743,7 +1759,6 @@ void MainWindow::on_pushButton_49_clicked()
         LineEditCurrentCalibration4 = ui->lineEdit_39;
         appendToTextEdit(Read, "电流标定点4", "");
     });
-    delay(150);
 
     // 读取电流标定点4对应PWM定时器计数值
     functionQueue.enqueue([this]() {
@@ -1751,7 +1766,6 @@ void MainWindow::on_pushButton_49_clicked()
         LineEditInternalCode4 = ui->lineEdit_35;
         appendToTextEdit(Read, "电流标定内码4", "");
     });
-    delay(150);
 
     // 读取电流标定点5电流uA
     functionQueue.enqueue([this]() {
@@ -1759,17 +1773,15 @@ void MainWindow::on_pushButton_49_clicked()
         LineEditCurrentCalibration5 = ui->lineEdit_38;
         appendToTextEdit(Read, "电流标定内码5", "");
     });
-    delay(150);
 
     // 读取电流标定点5对应PWM定时器计数值
     functionQueue.enqueue([this]() {
         serialRead(Portsensor, "004A", "02");
         LineEditInternalCode5 = ui->lineEdit_36;
         appendToTextEdit(Read, "电流标定内码5", "");
-    });
-
-    // 重新打开自动扫描定时器
-    autoScanTimer.start(ui->lineEdit_8->text().toInt());
+        ui->pushButton_49->setEnabled(true);
+        autoScanTimer.start(ui->lineEdit_8->text().toInt());
+    });   
 }
 
 // 保存电流标定点
@@ -1926,9 +1938,6 @@ void MainWindow::on_pushButton_73_clicked()
 // 清除传感器标定
 void MainWindow::on_pushButton_74_clicked()
 {
-    // 按下变绿
-//  buttonTrigge(ui->pushButton_74);
-
     // 清除传感器标定
     functionQueue.enqueue([this]() {
         serialWrite(Portsensor, "000C", "9D63");
@@ -1946,7 +1955,9 @@ void MainWindow::on_pushButton_75_clicked()
     }
 
     // 清除队列
-    functionQueue.clear();
+    queueClear();
+
+    ui->pushButton_75->setEnabled(false);
 
     // 读传感器标定点1Pa
     functionQueue.enqueue([this]() {
@@ -2026,10 +2037,9 @@ void MainWindow::on_pushButton_75_clicked()
         serialRead(Portsensor, "005B", "02");
         LineEditSensorInternalCode5 = ui->lineEdit_66;
         appendToTextEdit(Read, "传感器标定点5内码", "");
+        ui->pushButton_75->setEnabled(true);
+        autoScanTimer.start(ui->lineEdit_8->text().toInt());
     });
-
-    // 重新打开自动扫描定时器
-    autoScanTimer.start(ui->lineEdit_8->text().toInt());
 }
 
 // 保存传感器标定
@@ -2065,7 +2075,7 @@ void MainWindow::on_pushButton_22_clicked()
         frame.append(0xFF);
         frame.append(0x04);
         frame.append(static_cast<char>(LengthByte_00));
-        frame.append(0x10);
+        frame.append(0x10)  ;
         frame.append(static_cast<char>(LengthByte_00));
         frame.append(0x01);
         frame.append(0x25);
@@ -2111,33 +2121,43 @@ void MainWindow::on_pushButton_22_clicked()
 void MainWindow::on_pushButton_13_clicked()
 {
     // 入队
-    functionQueue.enqueue([this]() {
-        QString hexStr = QString("%1").arg(ui->lineEdit_7->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
-        serialWrite(Portsensor, "0010", hexStr);
-        appendToTextEdit(Write, "设备地址", ui->lineEdit_7->text());
-    });
+    if (ui->label_25->text() == "uA") {
+        functionQueue.prepend([this]() {
+            QString hexStr = QString("%1").arg(ui->lineEdit_7->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
+            serialWrite(Portsensor, "0010", hexStr);
+            appendToTextEdit(Write, "设备地址", ui->lineEdit_7->text());
+        });
+    } else if (ui->label_25->text() == "mV") {
+        functionQueue.prepend([this]() {
+            QString hexStr = QString("%1").arg(ui->lineEdit_7->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
+            serialWrite(Portsensor, "0000", hexStr);
+            appendToTextEdit(Write, "设备地址", ui->lineEdit_7->text());
+        });
+    }
 }
 
 // 写波特率
 void MainWindow::on_pushButton_15_clicked()
 {
-    if (!baudMap.contains(ui->comboBox_6->currentText())) {
-        QMessageBox::information(this, "错误", "波特率错误！！！", QMessageBox::Ok);
-        return;
-    }
-
     // 入队
-    functionQueue.enqueue([this]() {
-        serialWrite(Portsensor, "0011", baudMap.value(ui->comboBox_6->currentText()).rightJustified(4, '0'));
-        appendToTextEdit(Write, "波特率", ui->comboBox_6->currentText());
-    });
+    if (ui->label_25->text() == "uA") {
+        functionQueue.prepend([this]() {
+            serialWrite(Portsensor, "0011", baudMap.value(ui->comboBox_6->currentText()).rightJustified(4, '0'));
+            appendToTextEdit(Write, "波特率", ui->comboBox_6->currentText());
+        });
+    } else if (ui->label_25->text() == "mV") {
+        functionQueue.prepend([this]() {
+            serialWrite(Portsensor, "0001", baudMap.value(ui->comboBox_6->currentText()).rightJustified(4, '0'));
+            appendToTextEdit(Write, "波特率", ui->comboBox_6->currentText());
+        });
+    }
 }
 
 // 写电流下限
 void MainWindow::on_pushButton_17_clicked()
 {
     // 入队
-    functionQueue.enqueue([this]() {
+    functionQueue.prepend([this]() {
         QString hexStr = QString("%1").arg(ui->lineEdit_9->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
         serialWrite(Portsensor, "0015", hexStr);
         appendToTextEdit(Write, "电流/电压下限", ui->lineEdit_9->text());
@@ -2148,7 +2168,7 @@ void MainWindow::on_pushButton_17_clicked()
 void MainWindow::on_pushButton_19_clicked()
 {
     // 入队
-    functionQueue.enqueue([this]() {
+    functionQueue.prepend([this]() {
         QString hexStr = QString("%1").arg(ui->lineEdit_10->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
         serialWrite(Portsensor, "0016", hexStr);
         appendToTextEdit(Write, "电流/电压上限", ui->lineEdit_10->text());
@@ -2159,62 +2179,124 @@ void MainWindow::on_pushButton_19_clicked()
 void MainWindow::on_pushButton_21_clicked()
 {
     // 入队
-    functionQueue.enqueue([this]() {
+    functionQueue.prepend([this]() {
         QString hexStr = QString("%1").arg(ui->lineEdit_11->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
         serialWrite(Portsensor, "001B", hexStr);
         appendToTextEdit(Write, "零点跟踪", ui->lineEdit_11->text());
     });
 }
 
-// OPA校正
+// 0Pa校正
 void MainWindow::on_pushButton_10_clicked()
 {
     // 设置OPA校正
-    functionQueue.prepend([this]() {
-        serialWrite(Portsensor, "000C", "0030");
-        appendToTextEdit(Write, "Opa校正", "校正");
-    });
+    if (ui->label_25->text() == "uA") {
+        functionQueue.prepend([this]() {
+            serialWrite(Portsensor, "000C", "0030");
+            appendToTextEdit(Write, "0pA校正", "校正");
+        });
+    } else if (ui->label_25->text() == "mV") {
+        functionQueue.prepend([this]() {
+            QString hexStr = QString("%1").arg(ui->lineEdit_15->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
+            serialWrite(Portsensor, "0000", hexStr);
+            appendToTextEdit(Read, "校正", "");
+        });
+    }
 }
 
 // 变送模式
 void MainWindow::on_pushButton_11_clicked()
 {
-    if (autoScanTimer.isActive()) {
-        autoScanTimer.stop();
-    }
+    autoScanTimer.stop();
+
+    // 清除队列
+    queueClear();
 
     // 设置变送模式
-    functionQueue.prepend([this]() {
-        serialWrite(Portsensor, "000C", "4253");
-        appendToTextEdit(Write, "变送模式", "变送模式使能");
-    });
-
-    // 先延时2秒看看效果
-    QTimer::singleShot(2000,[=](){
-        appendToTextEdit(Read, "变送模式成功", "");
-    });
-
-    // 重新打开自动扫描定时器
+    if (ui->label_25->text() == "uA") {
+        functionQueue.enqueue([this]() {
+            serialWrite(Portsensor, "000C", "4253");
+            appendToTextEdit(Write, "变送模式", "变送模式使能");
+        });
+    }   else if (ui->label_25->text() == "mV") {
+        functionQueue.enqueue([this]() {
+            serialWrite(Portsensor, "000F", "00");
+            appendToTextEdit(Write, "变送模式", "变送模式使能");
+        });
+    }
+    delay(1000);
     autoScanTimer.start(ui->lineEdit_8->text().toInt());
 }
 
-// 串口读取万用表电压
-void MainWindow::on_pushButton_23_clicked()
+// 指针清空
+void MainWindow::pointerInit()
 {
-    serialWrite(PortMultimeter, "", ":MEASure:VOLTage:DC?");
-}
+    // 参数配置
+    LineEditID = nullptr;
+    LineEditCurrentMin = nullptr;
+    LineEditCurrentMax = nullptr;
+    LineEditZeroTracking = nullptr;
 
-// 串口读取万用表电流
-void MainWindow::on_pushButton_24_clicked()
-{
-    serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
+    // 传感器配置
+    LineEditOutMinPa = nullptr;
+    LineEditOutMaxPa = nullptr;
+    LineEditOutMincmH2O = nullptr;
+    LineEditOutMaxcmH2O = nullptr;
+    LineEditMinInternalCode = nullptr;
+    LineEditMaxInternalCode = nullptr;
+    LineEditStartPointuA = nullptr;
+    LineEditStartPointPa = nullptr;
+    LineEditEndPointuA = nullptr;
+    LineEditEndPointPa = nullptr;
+
+    // 电流标定
+    LineEditDutyCycle1 = nullptr;
+    LineEditDutyCycle2 = nullptr;
+    LineEditDutyCycle3 = nullptr;
+    LineEditDutyCycle4 = nullptr;
+    LineEditDutyCycle5 = nullptr;
+    LineEditInternalCode1 = nullptr;
+    LineEditInternalCode2 = nullptr;
+    LineEditInternalCode3 = nullptr;
+    LineEditInternalCode4 = nullptr;
+    LineEditInternalCode5 = nullptr;
+    LineEditCurrentCalibration1 = nullptr;
+    LineEditCurrentCalibration2 = nullptr;
+    LineEditCurrentCalibration3 = nullptr;
+    LineEditCurrentCalibration4 = nullptr;
+    LineEditCurrentCalibration5 = nullptr;
+    LineEditCurrentCalibrationNum = nullptr;
+
+    // 传感器标定
+    LineEditSensorCalibration1 = nullptr;
+    LineEditSensorCalibration2 = nullptr;
+    LineEditSensorCalibration3 = nullptr;
+    LineEditSensorCalibration4 = nullptr;
+    LineEditSensorCalibration5 = nullptr;
+    LineEditSensorInternalCode1 = nullptr;
+    LineEditSensorInternalCode2 = nullptr;
+    LineEditSensorInternalCode3 = nullptr;
+    LineEditSensorInternalCode4 = nullptr;
+    LineEditSensorInternalCode5 = nullptr;
+    LineEditSensorCalibrationNum = nullptr;
+
+    // 自动扫描配置
+    LineEditPressure = nullptr;
+    LineEditInternalCode = nullptr;
+    LineEditCurrent = nullptr;
+    LineEditPWM = nullptr;
+    LineEditTemprature = nullptr;
+
+    // ComboBox
+    ComboBoxBaud = nullptr;
+    ComboBoxTransmissionMethod = nullptr;
 }
 
 // 自动出队槽函数
 void MainWindow::autoDequeueSolt()
 {
     if (functionQueue.isEmpty()) return;
-    waitingResponseTimer.start(200);      // 主要针对自动扫描
+    waitingResponseTimer.start(100);      // 主要针对自动扫描
     auto func = functionQueue.head();     // 出队
     func();
 }
@@ -2229,6 +2311,12 @@ void MainWindow::waitingResponseTimerSolt()
     // 窗口提示
     appendToTextEdit(Receive, "", "接收数据超时");
     waitingResponseTimer.stop();
+    if (timeoutTimes < 10) {
+        timeoutTimes++;
+    } else {
+        queueClear();
+        timeoutTimes = 0;
+    }
 }
 
 // 一键标定
@@ -2244,7 +2332,8 @@ void MainWindow::on_pushButton_25_clicked()
         autoScanTimer.stop();
     }
     // 清除队列
-    functionQueue.clear();
+    queueClear();
+    ui->pushButton_25->setEnabled(false);
 
     // 占空比1
     functionQueue.enqueue([this]() {
@@ -2253,14 +2342,21 @@ void MainWindow::on_pushButton_25_clicked()
         appendToTextEdit(Write, "占空比1", ui->lineEdit_27->text());
     });
 
+    // 先发一条指令告诉万用表我要开始读了
     if (ui->label_25->text() == "uA") {
-        delay(1000);
+        delay(2000);
+        serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
+    }
+
+    if (ui->label_25->text() == "uA") {
+        delay(1500);
         LineEditCurrentCalibration1 = ui->lineEdit_37;
         serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
     }
 
     delay(500);
     functionQueue.enqueue([this]() {
+
         QString hexStr = QString("%1").arg(ui->lineEdit_37->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
         serialWrite(Portsensor, "0029", hexStr);
         appendToTextEdit(Write, "电流标定点1", ui->lineEdit_37->text());
@@ -2280,7 +2376,7 @@ void MainWindow::on_pushButton_25_clicked()
     });
 
     if (ui->label_25->text() == "uA") {
-        delay(1000);
+        delay(1500);
         LineEditCurrentCalibration2 = ui->lineEdit_41;
         serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
     }
@@ -2306,7 +2402,7 @@ void MainWindow::on_pushButton_25_clicked()
     });
 
     if (ui->label_25->text() == "uA") {
-        delay(1000);
+        delay(1500);
         LineEditCurrentCalibration3 = ui->lineEdit_40;
         serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
     }
@@ -2332,7 +2428,7 @@ void MainWindow::on_pushButton_25_clicked()
     });
 
     if (ui->label_25->text() == "uA") {
-        delay(1000);
+        delay(1500);
         LineEditCurrentCalibration4 = ui->lineEdit_39;
         serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
     }
@@ -2358,7 +2454,7 @@ void MainWindow::on_pushButton_25_clicked()
     });
 
     if (ui->label_25->text() == "uA") {
-        delay(1000);
+        delay(1500);
         LineEditCurrentCalibration1 = ui->lineEdit_38;
         serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
     }
@@ -2376,6 +2472,7 @@ void MainWindow::on_pushButton_25_clicked()
         appendToTextEdit(Read, "电流标定点数", "");
     });
 
+    ui->pushButton_25->setEnabled(true);
     autoScanTimer.start(ui->lineEdit_8->text().toInt());
 }
 
@@ -2409,66 +2506,121 @@ void MainWindow::selectSensor(QPushButton *button)
 // 15011 1K
 void MainWindow::on_pushButton_27_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("1000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("500");
+    ui->lineEdit_69->setText("1000");
     selectSensor(ui->pushButton_27);
 }
 
 // 15021 2K
 void MainWindow::on_pushButton_30_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("2000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("1000");
+    ui->lineEdit_69->setText("2000");
     selectSensor(ui->pushButton_30);
 }
 
 // 15061 5K
 void MainWindow::on_pushButton_31_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("5000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("2500");
+    ui->lineEdit_69->setText("5000");
     selectSensor(ui->pushButton_31);
 }
 
 // 15101 10K
 void MainWindow::on_pushButton_51_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("10000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("5000");
+    ui->lineEdit_69->setText("10000");
     selectSensor(ui->pushButton_51);
 }
 
 // 15201 20K
 void MainWindow::on_pushButton_52_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("20000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("10000");
+    ui->lineEdit_69->setText("20000");
     selectSensor(ui->pushButton_52);
 }
 
 // 15401 40K
 void MainWindow::on_pushButton_53_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("40000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("20000");
+    ui->lineEdit_69->setText("40000");
     selectSensor(ui->pushButton_53);
 }
 
 // 15111 100K
 void MainWindow::on_pushButton_102_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("100000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("50000");
+    ui->lineEdit_69->setText("100000");
     selectSensor(ui->pushButton_102);
 }
 
 // 54012 1K
 void MainWindow::on_pushButton_106_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("1000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("500");
+    ui->lineEdit_69->setText("1000");
     selectSensor(ui->pushButton_106);
 }
 
 // 54022 2K
 void MainWindow::on_pushButton_105_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("2000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("1000");
+    ui->lineEdit_69->setText("2000");
     selectSensor(ui->pushButton_105);
 }
 
 // 54042 4K
 void MainWindow::on_pushButton_104_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("4000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("2000");
+    ui->lineEdit_69->setText("4000");
     selectSensor(ui->pushButton_104);
 }
 
 // 54102 10K
 void MainWindow::on_pushButton_103_clicked()
 {
+    ui->lineEdit_24->setText("0");
+    ui->lineEdit_26->setText("10000");
+    ui->lineEdit_67->setText("0");
+    ui->lineEdit_68->setText("5000");
+    ui->lineEdit_69->setText("10000");
     selectSensor(ui->pushButton_103);
 }
 
@@ -2623,8 +2775,8 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
 {
     if (arg1 == "0") {         // 4mA~20mA
         // 参数配置修改
-        ui->label_9 ->setText("电流下限（uA）");
-        ui->label_10->setText("电流上限（uA）");
+        ui->label_9 ->setText("电流下限(uA)");
+        ui->label_10->setText("电流上限(uA)");
         ui->lineEdit_9 ->setText("3800");
         ui->lineEdit_10->setText("20200");
 
@@ -2635,7 +2787,7 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         ui->lineEdit_25->setText("20000");
 
         // 电流标定修改
-        ui->label_31->setText("          0~100  内码    uA");
+        ui->label_31->setText("           0~100   内码   uA");
         ui->lineEdit_27->setText("17");
         ui->lineEdit_28->setText("30");
         ui->lineEdit_29->setText("50");
@@ -2645,8 +2797,8 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         appendToTextEdit(Receive, "", "4mA~20mA");
     } else if (arg1 == "1") {   // 0V~5V
         // 参数配置修改
-        ui->label_9 ->setText("电压下限（mV）");
-        ui->label_10->setText("电压上限（mV）");
+        ui->label_9 ->setText("电压下限(mV)");
+        ui->label_10->setText("电压上限(mV)");
         ui->lineEdit_9 ->setText("0");
         ui->lineEdit_10->setText("6000");
 
@@ -2667,8 +2819,8 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         appendToTextEdit(Receive, "", "0V~5V");
     } else if (arg1 == "2") {  // 0V~10V
         // 参数配置修改
-        ui->label_9 ->setText("电压下限（mV）");
-        ui->label_10->setText("电压上限（mV）");
+        ui->label_9 ->setText("电压下限(mV)");
+        ui->label_10->setText("电压上限(mV)");
         ui->lineEdit_9 ->setText("0");
         ui->lineEdit_10->setText("11000");
 
@@ -2690,11 +2842,26 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
     }
 }
 
+void MainWindow::queueClear()
+{
+    functionQueue.clear();
+    pointerInit();
+    ui->pushButton_37->setEnabled(true);
+    ui->pushButton_33->setEnabled(true);
+    ui->pushButton_49->setEnabled(true);
+    ui->pushButton_75->setEnabled(true);
+}
+
 // 选择变送方式为4mA~20mA
 void MainWindow::on_pushButton_26_clicked()
 {
-    ui->label_9 ->setText("电流下限（uA）");
-    ui->label_10->setText("电流上限（uA）");
+    // 隐藏校正数据
+    ui->lineEdit_15->hide();
+    ui->pushButton_35->hide();
+    ui->pushButton_36->hide();
+
+    ui->label_9 ->setText("电流下限(uA)");
+    ui->label_10->setText("电流上限(uA)");
     ui->lineEdit_9 ->setText("3800");
     ui->lineEdit_10->setText("20200");
 
@@ -2704,8 +2871,14 @@ void MainWindow::on_pushButton_26_clicked()
     ui->lineEdit_23->setText("4000");
     ui->lineEdit_25->setText("20000");
 
+    // 波特率修改
+    ui->comboBox_6->clear();
+    for (auto it = baudMap.constBegin(); it != baudMap.constEnd(); ++it) {
+        ui->comboBox_6->addItem(it.key());  // 显示型号，绑定ID
+    }
+
     // 电流标定修改
-    ui->label_31->setText("          0~100  内码    uA");
+    ui->label_31->setText("           0~100   内码   uA");
     ui->lineEdit_27->setText("17");
     ui->lineEdit_28->setText("30");
     ui->lineEdit_29->setText("50");
@@ -2719,8 +2892,12 @@ void MainWindow::on_pushButton_26_clicked()
 void MainWindow::on_pushButton_28_clicked()
 {
     // 参数配置修改
-    ui->label_9 ->setText("电压下限（mV）");
-    ui->label_10->setText("电压上限（mV）");
+    ui->lineEdit_15->show();
+    ui->pushButton_35->show();
+    ui->pushButton_36->show();
+
+    ui->label_9 ->setText("电压下限(mV)");
+    ui->label_10->setText("电压上限(mV)");
     ui->lineEdit_9 ->setText("0");
     ui->lineEdit_10->setText("6000");
 
@@ -2729,6 +2906,12 @@ void MainWindow::on_pushButton_28_clicked()
     ui->label_28->setText("mV");
     ui->lineEdit_23->setText("0");
     ui->lineEdit_25->setText("5000");
+
+    // 波特率修改
+    ui->comboBox_6->clear();
+    for (auto it = voltageBaudMap.constBegin(); it != voltageBaudMap.constEnd(); ++it) {
+        ui->comboBox_6->addItem(it.key());  // 显示型号，绑定ID
+    }
 
     // 电流标定修改
     ui->label_31->setText("          0~100  内码    mV");
@@ -2744,8 +2927,12 @@ void MainWindow::on_pushButton_28_clicked()
 // 选择变送方式为0V~10V
 void MainWindow::on_pushButton_29_clicked()
 {
-    ui->label_9 ->setText("电压下限（mV）");
-    ui->label_10->setText("电压上限（mV）");
+    ui->lineEdit_15->show();
+    ui->pushButton_35->show();
+    ui->pushButton_36->show();
+
+    ui->label_9 ->setText("电压下限(mV)");
+    ui->label_10->setText("电压上限(mV)");
     ui->lineEdit_9 ->setText("0");
     ui->lineEdit_10->setText("11000");
 
@@ -2754,6 +2941,12 @@ void MainWindow::on_pushButton_29_clicked()
     ui->label_28->setText("mV");
     ui->lineEdit_23->setText("0");
     ui->lineEdit_25->setText("10000");
+
+    // 波特率修改
+    ui->comboBox_6->clear();
+    for (auto it = voltageBaudMap.constBegin(); it != voltageBaudMap.constEnd(); ++it) {
+        ui->comboBox_6->addItem(it.key());  // 显示型号，绑定ID
+    }
 
     // 电流标定修改
     ui->label_31->setText("          0~100  内码    mV");
