@@ -131,6 +131,7 @@ public:
     //     };
 
     QMap<QString, QString> sensorListMap;
+    QMap<QString, QString> voltageSensorListMap;
     QMap<QString, QString> transmissionMethodListMap;
     QMap<QString, QString> baudMap;
     QMap<QString, QString> voltageBaudMap;

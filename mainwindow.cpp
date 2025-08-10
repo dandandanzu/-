@@ -231,7 +231,7 @@ void MainWindow::sensorSerialDelay()
     }
 
     // 开启定时器接收串口数据延时
-    sensorSerialDelayTimer.start(50);
+    sensorSerialDelayTimer.start(30);
 }
 
 // 传感器串口接收
@@ -248,8 +248,9 @@ void MainWindow::sensorSerialRead()
 
     // 检查数据是否有回复
     if (data.size() < 3 && waitingResponseTimer.isActive()) {
+        pointerInit();
+        ui->plainTextEdit->appendPlainText("！！！返回数据有误！！！");       
         waitingResponseTimer.stop();
-        ui->plainTextEdit->appendPlainText("！！！返回数据有误！！！");
         return;
     }
 
@@ -382,16 +383,26 @@ void MainWindow::sensorSerialRead()
 
         } else if (static_cast<quint8>(data[2]) == 0x04) {      // 32位
             // 解析数据
-            QByteArray floatBytes = data.mid(3, 4);             // 从第4字节开始取4字节（C4BB8000）
             uint32_t intValue = 0;
-            for (int i = 0; i < 4; ++i) {
-                intValue |= static_cast<quint8>(floatBytes.at(i)) << (8 * (3 - i));
+            if (data.size() >= 7) {
+                QByteArray floatBytes = data.mid(3, 4);             // 从第4字节开始取4字节（C4BB8000）
+                for (int i = 0; i < 4; ++i) {
+                    intValue |= static_cast<quint8>(floatBytes.at(i)) << (8 * (3 - i));
+                }
+            } else {
+                appendToTextEdit(Receive, "", "接收数据长度有误"+allStr);
+                pointerInit();
+                waitingResponseTimer.stop();
+                return;
             }
-
             // 如果是float型，否择是32位int型
             if (isFloat) {                                      //  uint32_t 的二进制表示转为 float
                 float floatValue;
                 memcpy(&floatValue, &intValue, sizeof(float));  // 安全类型转换
+
+                if (std::fabs(floatValue) < 1.0) { // 等价于 value ∈ (-1, 1)
+                    floatValue = 0.0;
+                }
                 valueStr = QString::number(floatValue);         // 转换浮点数为字符串
                 isFloat = false;                                // 转换完成后修改状态
 
@@ -503,17 +514,18 @@ void MainWindow::sensorSerialRead()
             }
         }
     } else if (static_cast<quint8>(data[1]) == 0x84) {
-        appendToTextEdit(Receive, "", "接收到错误码->"+allStr);
+        pointerInit();
+        appendToTextEdit(Receive, "", "接收到错误码->"+allStr);       
         waitingResponseTimer.stop();
         return;
     }
+
+    waitingResponseTimer.stop();
 
     // 选择传感器型号时，没有用队列发，此时队列时空的，不能出队
     if (!functionQueue.isEmpty()) {
         functionQueue.dequeue();
     }
-    // 超时时间停止
-    waitingResponseTimer.stop();
 }
 
 // 万用表串口接收延时
@@ -649,6 +661,24 @@ void MainWindow::interfaceInit()
         {"TE_10K", "54102"},    //10K SM9541_100C_DC3S
     };
 
+    // 电压传感器初始化
+    voltageSensorListMap = {
+        //LW
+        {"1K", "4097"},        //1K   LWLP5001DD   0x1001
+        {"2K", "4098"},        //2K   LWLP5002DD   0x1002
+        {"5K", "4102"},        //5K   LWLP5006DD   0x1006
+        {"10K", "4106"},       //10K  LWLP5010DD   0x100A
+        {"20K", "4116"},       //20K  LWLP5020DD   0x1014
+        {"40K", "4136"},       //40K  LWLP5040DD   0x1028
+        {"100K", "4196"},      //100k LWLP5100DD   0x1064
+        // TE
+        {"TE_1K", "8449"},     //1K  SM9541_010C_DC3S  0x2101
+        {"TE_2K", "8450"},     //2K  SM9541_020C_DC3S  0x2102
+        {"TE_4K", "8452"},     //4K  SM9541_040C_DC3S  0x2104
+        {"TE_10K", "8458"},    //10K SM9541_100C_DC3S  0x210A
+    };
+
+
     //变送方式初始化
     transmissionMethodListMap = {
         {"4mA~20mA", "0"},
@@ -717,6 +747,7 @@ void MainWindow::autoScan()
 
     // 当前内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         LineEditInternalCode = ui->lineEdit_5;
         serialRead(Portsensor, "0009", "01");
     });
@@ -841,13 +872,15 @@ void MainWindow::on_pushButton_2_clicked()
         ui->tabWidget->setEnabled(true);
 
         // 清空队列
+        delay(10);
         queueClear();
+        delay(10);
         if (waitingResponseTimer.isActive()) {
             waitingResponseTimer.stop();
         }
 
         // 开启自动出队定时器
-        autoDequeueTimer.start(150);
+        autoDequeueTimer.start(60);
     }
     else {
         sensorSerial.close();
@@ -858,7 +891,9 @@ void MainWindow::on_pushButton_2_clicked()
         ui->comboBox->setEnabled(true);
         ui->pushButton->setEnabled(true);
         ui->tabWidget->setEnabled(false);
+        delay(10);
         queueClear();
+        delay(10);
         autoDequeueTimer.stop();
     }
 }
@@ -888,6 +923,8 @@ void MainWindow::on_pushButton_4_clicked()
         ui->pushButton_4->setStyleSheet("background-color: #00BFFF;");
         ui->comboBox_2->setEnabled(false);
         ui->pushButton_3->setEnabled(false);
+
+        // 打开串口先发送一条命令
     }
     else {
         MultimeterSerial.close();
@@ -1057,8 +1094,11 @@ void MainWindow::on_pushButton_36_clicked()
 void MainWindow::on_pushButton_37_clicked()
 {
     autoScanTimer.stop();
+
+    delay(10);
     // 清除队列
     queueClear();
+    delay(10);
 
     ui->pushButton_37->setEnabled(false);
 
@@ -1098,6 +1138,7 @@ void MainWindow::on_pushButton_37_clicked()
 
     // 当前内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         LineEditInternalCode = ui->lineEdit_5;
         serialRead(Portsensor, "0009", "01");
     });
@@ -1212,6 +1253,7 @@ void MainWindow::on_pushButton_37_clicked()
 
     // 插队读传感器最小内码值
     functionQueue.enqueue([this]() {
+        isFloat = false;
         LineEditMinInternalCode = ui->lineEdit_21;
         serialRead(Portsensor, "0062", "02");
         appendToTextEdit(Read, "传感器输出最小内码值", "");
@@ -1241,6 +1283,7 @@ void MainWindow::on_pushButton_37_clicked()
 
     // 插队读取传感器变送满度uA
     functionQueue.enqueue([this]() {
+        isFloat = false;
         LineEditEndPointuA = ui->lineEdit_25;
         serialRead(Portsensor, "0020", "01");
         appendToTextEdit(Read, "传感器变送满度（uA/mV）", "");
@@ -1256,6 +1299,7 @@ void MainWindow::on_pushButton_37_clicked()
 
     // 读取电流标定点数
     functionQueue.enqueue([this]() {
+        isFloat = false;
         LineEditCurrentCalibrationNum = ui->lineEdit_13;
         serialRead(Portsensor, "0041", "01");
         appendToTextEdit(Read, "电流标定点数", "");
@@ -1279,7 +1323,7 @@ void MainWindow::on_pushButton_37_clicked()
     functionQueue.enqueue([this]() {
         serialRead(Portsensor, "002A", "01");
         LineEditCurrentCalibration2 = ui->lineEdit_41;
-        appendToTextEdit(Read, "电流标定内码5", "");
+        appendToTextEdit(Read, "电流标定2", "");
     });
 
     // 读取电流标定点2对应PWM定时器计数值
@@ -1321,7 +1365,7 @@ void MainWindow::on_pushButton_37_clicked()
     functionQueue.enqueue([this]() {
         serialRead(Portsensor, "002D", "01");
         LineEditCurrentCalibration5 = ui->lineEdit_38;
-        appendToTextEdit(Read, "电流标定内码5", "");
+        appendToTextEdit(Read, "电流标定5", "");
     });
 
     // 读取电流标定点5对应PWM定时器计数值
@@ -1347,6 +1391,7 @@ void MainWindow::on_pushButton_37_clicked()
 
     // 读传感器标定点1内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0053", "02");
         LineEditSensorInternalCode1 = ui->lineEdit_62;
         appendToTextEdit(Read, "传感器标定点1内码", "");
@@ -1363,6 +1408,7 @@ void MainWindow::on_pushButton_37_clicked()
 
     // 读传感器标定点2内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0055", "02");
         LineEditSensorInternalCode2 = ui->lineEdit_63;
 
@@ -1379,6 +1425,7 @@ void MainWindow::on_pushButton_37_clicked()
 
     // 读传感器标定点3内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0057", "02");
         LineEditSensorInternalCode3 = ui->lineEdit_64;
         appendToTextEdit(Read, "传感器标定点3内码", "");
@@ -1395,6 +1442,7 @@ void MainWindow::on_pushButton_37_clicked()
 
     // 读传感器标定点4内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0059", "02");
         LineEditSensorInternalCode4 = ui->lineEdit_65;
         appendToTextEdit(Read, "传感器标定点4内码", "");
@@ -1410,6 +1458,7 @@ void MainWindow::on_pushButton_37_clicked()
 
     // 读传感器标定点5内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "005B", "02");
         LineEditSensorInternalCode5 = ui->lineEdit_66;
         appendToTextEdit(Read, "传感器标定点5内码", "");
@@ -1429,7 +1478,9 @@ void MainWindow::on_pushButton_33_clicked()
     }
 
     // 清除队列
+    delay(10);
     queueClear();
+    delay(10);
 
     ui->pushButton_33->setEnabled(false);
 
@@ -1474,6 +1525,7 @@ void MainWindow::on_pushButton_33_clicked()
 
     // 插队读传感器最小内码值
     functionQueue.enqueue([this]() {
+        isFloat = false;
         LineEditMinInternalCode = ui->lineEdit_21;
         serialRead(Portsensor, "0062", "02");
         appendToTextEdit(Read, "传感器输出最小内码值", "");
@@ -1503,6 +1555,7 @@ void MainWindow::on_pushButton_33_clicked()
 
     // 插队读取传感器变送满度uA
     functionQueue.enqueue([this]() {
+        isFloat = false;
         LineEditEndPointuA = ui->lineEdit_25;
         serialRead(Portsensor, "0020", "01");
         appendToTextEdit(Read, "传感器变送满度（uA/mV）", "");
@@ -1539,6 +1592,7 @@ void MainWindow::on_pushButton_34_clicked()
 
     // 插队写入变送满度uA
     functionQueue.enqueue([this]() {
+        isFloat = false;
         QString hexStr = QString("%1").arg(ui->lineEdit_25->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
         serialWrite(Portsensor, "0020", hexStr);
         appendToTextEdit(Write, "变送满度（uA/mV）", ui->lineEdit_25->text());
@@ -1707,7 +1761,9 @@ void MainWindow::on_pushButton_49_clicked()
     }
 
     // 清除队列
+    delay(10);
     queueClear();
+    delay(10);
 
     ui->pushButton_49->setEnabled(false);
 
@@ -1806,6 +1862,7 @@ void MainWindow::on_pushButton_69_clicked()
 
     // 读取传感器标定点1对应PWM定时器计数值
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0053", "02");
         LineEditSensorInternalCode1 = ui->lineEdit_62;
         appendToTextEdit(Read, "传感器标定点1内码", "");
@@ -1834,6 +1891,7 @@ void MainWindow::on_pushButton_70_clicked()
 
     // 读取传感器标定点2对应PWM定时器计数值
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0055", "02");
         LineEditSensorInternalCode2 = ui->lineEdit_63;
 
@@ -1860,6 +1918,7 @@ void MainWindow::on_pushButton_71_clicked()
 
     // 读取传感器标定点2对应PWM定时器计数值
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0057", "02");
         LineEditSensorInternalCode3 = ui->lineEdit_64;
 
@@ -1891,6 +1950,7 @@ void MainWindow::on_pushButton_72_clicked()
 
     // 读取传感器标定点4对应PWM定时器计数值
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0059", "02");
         LineEditSensorInternalCode4 = ui->lineEdit_65;
 
@@ -1922,6 +1982,7 @@ void MainWindow::on_pushButton_73_clicked()
 
     // 读取传感器标定点5对应PWM定时器计数值
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "005B", "02");
         LineEditSensorInternalCode5 = ui->lineEdit_66;
 
@@ -1955,7 +2016,9 @@ void MainWindow::on_pushButton_75_clicked()
     }
 
     // 清除队列
+    delay(10);
     queueClear();
+    delay(10);
 
     ui->pushButton_75->setEnabled(false);
 
@@ -1970,6 +2033,7 @@ void MainWindow::on_pushButton_75_clicked()
 
     // 读传感器标定点1内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0053", "02");
         LineEditSensorInternalCode1 = ui->lineEdit_62;
 
@@ -1987,6 +2051,7 @@ void MainWindow::on_pushButton_75_clicked()
 
     // 读传感器标定点2内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0055", "02");
         LineEditSensorInternalCode2 = ui->lineEdit_63;
 
@@ -2003,6 +2068,7 @@ void MainWindow::on_pushButton_75_clicked()
 
     // 读传感器标定点3内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0057", "02");
         LineEditSensorInternalCode3 = ui->lineEdit_64;        
         appendToTextEdit(Read, "传感器标定点3内码", "");
@@ -2019,6 +2085,7 @@ void MainWindow::on_pushButton_75_clicked()
 
     // 读传感器标定点4内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "0059", "02");
         LineEditSensorInternalCode4 = ui->lineEdit_65;
         appendToTextEdit(Read, "传感器标定点4内码", "");
@@ -2034,6 +2101,7 @@ void MainWindow::on_pushButton_75_clicked()
 
     // 读传感器标定点5内码
     functionQueue.enqueue([this]() {
+        isFloat = false;
         serialRead(Portsensor, "005B", "02");
         LineEditSensorInternalCode5 = ui->lineEdit_66;
         appendToTextEdit(Read, "传感器标定点5内码", "");
@@ -2085,6 +2153,13 @@ void MainWindow::on_pushButton_22_clicked()
         appendToTextEdit(Read, "开始连接设备", "");
     });
 
+    // 读变送方式
+    functionQueue.enqueue([this]() {
+        serialRead(Portsensor, "0013", "01");
+        isTransmissionMethod = true;
+        appendToTextEdit(Read, "读变送模式", "");
+    });
+
     // 读取固件版本
     functionQueue.enqueue([this]() {
         serialRead(Portsensor, "0000", "01");
@@ -2097,13 +2172,6 @@ void MainWindow::on_pushButton_22_clicked()
         serialRead(Portsensor, "0001", "02");
         isFirmwareinfo = true;
         appendToTextEdit(Read, "读固件信息", "");
-    });
-
-    // 读变送方式
-    functionQueue.enqueue([this]() {
-        serialRead(Portsensor, "0013", "01");
-        isTransmissionMethod = true;
-        appendToTextEdit(Read, "读变送模式", "");
     });
 
     // 开启自动扫描
@@ -2210,7 +2278,9 @@ void MainWindow::on_pushButton_11_clicked()
     autoScanTimer.stop();
 
     // 清除队列
+    delay(10);
     queueClear();
+    delay(10);
 
     // 设置变送模式
     if (ui->label_25->text() == "uA") {
@@ -2224,7 +2294,9 @@ void MainWindow::on_pushButton_11_clicked()
             appendToTextEdit(Write, "变送模式", "变送模式使能");
         });
     }
+    ui->pushButton_11->setEnabled(false);
     delay(1000);
+    ui->pushButton_11->setEnabled(true);
     autoScanTimer.start(ui->lineEdit_8->text().toInt());
 }
 
@@ -2296,8 +2368,8 @@ void MainWindow::pointerInit()
 void MainWindow::autoDequeueSolt()
 {
     if (functionQueue.isEmpty()) return;
-    waitingResponseTimer.start(100);      // 主要针对自动扫描
-    auto func = functionQueue.head();     // 出队
+    waitingResponseTimer.start(50);      // 主要针对自动扫描
+    auto func = functionQueue.head();    // 出队
     func();
 }
 
@@ -2314,7 +2386,9 @@ void MainWindow::waitingResponseTimerSolt()
     if (timeoutTimes < 10) {
         timeoutTimes++;
     } else {
+        delay(10);
         queueClear();
+        delay(10);
         timeoutTimes = 0;
     }
 }
@@ -2332,8 +2406,21 @@ void MainWindow::on_pushButton_25_clicked()
         autoScanTimer.stop();
     }
     // 清除队列
+    delay(10);
     queueClear();
-    ui->pushButton_25->setEnabled(false);
+    delay(10);
+    this->setEnabled(false);
+
+    // 先发一条指令告诉万用表我要开始读了,先清除
+    delay(500);
+    serialWrite(PortMultimeter, "", "*CLS");
+
+    // 先发一条指令不填充
+    if (ui->label_25->text() == "uA") {
+        delay(1000);
+        serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
+        appendToTextEdit(Read, "电流测量", "");
+    }
 
     // 占空比1
     functionQueue.enqueue([this]() {
@@ -2342,19 +2429,15 @@ void MainWindow::on_pushButton_25_clicked()
         appendToTextEdit(Write, "占空比1", ui->lineEdit_27->text());
     });
 
-    // 先发一条指令告诉万用表我要开始读了
-    if (ui->label_25->text() == "uA") {
-        delay(2000);
-        serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
-    }
-
+    // 修改占空比，填充电流
     if (ui->label_25->text() == "uA") {
         delay(1500);
         LineEditCurrentCalibration1 = ui->lineEdit_37;
         serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
+        appendToTextEdit(Read, "读占空比"+ui->lineEdit_27->text()+"% 时电流", "");
     }
 
-    delay(500);
+    delay(1000);
     functionQueue.enqueue([this]() {
 
         QString hexStr = QString("%1").arg(ui->lineEdit_37->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
@@ -2379,9 +2462,10 @@ void MainWindow::on_pushButton_25_clicked()
         delay(1500);
         LineEditCurrentCalibration2 = ui->lineEdit_41;
         serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
+        appendToTextEdit(Read, "读占空比"+ui->lineEdit_28->text()+"% 时电流", "");
     }
 
-    delay(500);
+    delay(1000);
     functionQueue.enqueue([this]() {
         QString hexStr = QString("%1").arg(ui->lineEdit_41->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
         serialWrite(Portsensor, "002A", hexStr);
@@ -2405,9 +2489,10 @@ void MainWindow::on_pushButton_25_clicked()
         delay(1500);
         LineEditCurrentCalibration3 = ui->lineEdit_40;
         serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
+        appendToTextEdit(Read, "读占空比"+ui->lineEdit_29->text()+"% 时电流", "");
     }
 
-    delay(500);
+    delay(1000);
     functionQueue.enqueue([this]() {
         QString hexStr = QString("%1").arg(ui->lineEdit_40->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
         serialWrite(Portsensor, "002B", hexStr);
@@ -2431,9 +2516,10 @@ void MainWindow::on_pushButton_25_clicked()
         delay(1500);
         LineEditCurrentCalibration4 = ui->lineEdit_39;
         serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
+        appendToTextEdit(Read, "读占空比"+ui->lineEdit_30->text()+"% 时电流", "");
     }
 
-    delay(500);
+    delay(1000);
     functionQueue.enqueue([this]() {
         QString hexStr = QString("%1").arg(ui->lineEdit_39->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
         serialWrite(Portsensor, "002C", hexStr);
@@ -2457,9 +2543,10 @@ void MainWindow::on_pushButton_25_clicked()
         delay(1500);
         LineEditCurrentCalibration1 = ui->lineEdit_38;
         serialWrite(PortMultimeter, "", ":MEASure:CURRent:DC?");
+        appendToTextEdit(Read, "读占空比"+ui->lineEdit_31->text()+"% 时电流", "");
     }
 
-    delay(500);
+    delay(1000);
     functionQueue.enqueue([this]() {
         QString hexStr = QString("%1").arg(ui->lineEdit_38->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
         serialWrite(Portsensor, "002D", hexStr);
@@ -2472,7 +2559,7 @@ void MainWindow::on_pushButton_25_clicked()
         appendToTextEdit(Read, "电流标定点数", "");
     });
 
-    ui->pushButton_25->setEnabled(true);
+    this->setEnabled(true);
     autoScanTimer.start(ui->lineEdit_8->text().toInt());
 }
 
@@ -2688,6 +2775,13 @@ void MainWindow::setTransmissionMethod(QPushButton *button)
             QString hexStr = QString("%1").arg(ui->lineEdit_25->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
             serialWrite(Portsensor, "0020", hexStr);
             appendToTextEdit(Write, "变送满度（uA/mV）", ui->lineEdit_25->text());
+        });
+
+        // 读波特率
+        functionQueue.prepend([this]() {
+            ComboBoxBaud = ui->comboBox_6;
+            serialRead(Portsensor, "0011", "01");
+            appendToTextEdit(Read, "波特率", "");
         });
 
     } else if (button->text() == "0V~5V") {
