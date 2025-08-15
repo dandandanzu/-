@@ -53,8 +53,9 @@ public:
     bool isTransmissionMethod = false;
 
     bool isFloat              = false;
+    bool isVoltageSensor      = false;
 
-    int timeoutTimes;
+    int timeoutTimes, errValueTimes;
 
     struct RegisterInfo {
         QString name;
@@ -190,7 +191,11 @@ public:
         *LineEditInternalCode       = nullptr,
         *LineEditCurrent            = nullptr,
         *LineEditPWM                = nullptr,
-        *LineEditTemprature         = nullptr;
+        *LineEditTemprature         = nullptr,
+
+        // 电压传感器特有
+        *LineEditPoint              = nullptr,
+        *LineEditCheck              = nullptr;
 
     QComboBox *ComboBoxBaud         = nullptr,
         *ComboBoxTransmissionMethod = nullptr;
@@ -375,6 +380,14 @@ private slots:
     void on_pushButton_28_clicked();
 
     void on_pushButton_29_clicked();
+
+    void on_pushButton_23_clicked();
+
+    void on_pushButton_24_clicked();
+
+    void on_pushButton_32_clicked();
+
+    void on_pushButton_54_clicked();
 
 private:
     Ui::MainWindow *ui;

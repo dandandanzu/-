@@ -4195,7 +4195,7 @@ QPushButton:pressed { background-color: #673AB7; }</string>
       <property name="geometry">
        <rect>
         <x>460</x>
-        <y>500</y>
+        <y>550</y>
         <width>94</width>
         <height>35</height>
        </rect>
@@ -4223,7 +4223,7 @@ QPushButton:pressed { background-color: #673AB7; }</string>
       <property name="geometry">
        <rect>
         <x>460</x>
-        <y>440</y>
+        <y>500</y>
         <width>94</width>
         <height>35</height>
        </rect>
@@ -4285,7 +4285,7 @@ QPushButton:pressed { background-color: #673AB7; }</string>
       <property name="geometry">
        <rect>
         <x>460</x>
-        <y>380</y>
+        <y>450</y>
         <width>94</width>
         <height>35</height>
        </rect>
@@ -4502,6 +4502,58 @@ QPushButton:pressed { background-color: #673AB7; }</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>380</y>
+        <width>70</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>75</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>间隔(ms)</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_12">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>410</y>
+        <width>94</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>NSimSun</family>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>1000</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
@@ -4653,120 +4705,6 @@ QPushButton:pressed { background-color: #673AB7; }</string>
     <property name="text">
      <string>清除全部</string>
     </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_8">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>470</y>
-      <width>121</width>
-      <height>140</height>
-     </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>95</width>
-      <height>140</height>
-     </size>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>16777215</width>
-      <height>16777215</height>
-     </size>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="title">
-     <string>连接设备</string>
-    </property>
-    <widget class="QLabel" name="label_14">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>30</y>
-       <width>70</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>75</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>13</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>间隔(ms)</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_8">
-     <property name="geometry">
-      <rect>
-       <x>17</x>
-       <y>58</y>
-       <width>94</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <family>NSimSun</family>
-       <pointsize>13</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>1000</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_22">
-     <property name="geometry">
-      <rect>
-       <x>17</x>
-       <y>93</y>
-       <width>94</width>
-       <height>35</height>
-      </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>75</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>13</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string/>
-     </property>
-     <property name="text">
-      <string>开始扫描</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QPlainTextEdit" name="plainTextEdit">
     <property name="geometry">
@@ -5206,6 +5144,299 @@ border: none;  /* 去掉边框 */}
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="pushButton_23">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>690</y>
+      <width>94</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>75</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string/>
+    </property>
+    <property name="text">
+     <string>小数点位</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_16">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>655</y>
+      <width>94</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>NSimSun</family>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_24">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>820</y>
+      <width>94</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>75</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string/>
+    </property>
+    <property name="text">
+     <string>读</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_42">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>785</y>
+      <width>94</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>NSimSun</family>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_32">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>860</y>
+      <width>94</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>75</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string/>
+    </property>
+    <property name="text">
+     <string>写</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_16">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>745</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>串口校验位</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_22">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>595</y>
+      <width>94</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>75</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string/>
+    </property>
+    <property name="text">
+     <string>扫描设备</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_14">
+    <property name="geometry">
+     <rect>
+      <x>33</x>
+      <y>532</y>
+      <width>70</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>75</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>间隔(ms)</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_8">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>560</y>
+      <width>94</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>NSimSun</family>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>1000</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_54">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>480</y>
+      <width>94</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>75</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string/>
+    </property>
+    <property name="text">
+     <string>连接设备</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
