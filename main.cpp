@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QScreen>
+#include <QFont>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {

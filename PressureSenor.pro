@@ -12,21 +12,15 @@ SOURCES += \
     crc.cpp \
     main.cpp \
     mainwindow.cpp \
-    port.cpp
 
 HEADERS += \
     crc.h \
     mainwindow.h \
-    port.h
 
 FORMS += \
     mainwindow.ui \
-    port.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-DISTFILES += \
-    程序流程简介.md

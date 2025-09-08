@@ -54,8 +54,13 @@ public:
 
     bool isFloat              = false;
     bool isVoltageSensor      = false;
+    bool isDeviceID           = false;
+    bool setpressureUnit      = false;
+    bool isSetBtn             = false;
 
     int timeoutTimes, errValueTimes;
+
+    QList<QPushButton*> buttonList;
 
     struct RegisterInfo {
         QString name;
@@ -65,71 +70,6 @@ public:
         QString value;
         QString description;
     };
-
-    QList<QPushButton*> buttonList;
-    // QList<RegisterInfo> registerList = {
-    //     {"FW_VER", "40000", "1","uint16","0","固件版本"},
-    //     {"TIMESTAMP" ,"40001", "2","uint32","0","固件信息"},
-    //     {"REG_1I_TEMPATURE", "40003", "1", "uint16", "0", "当前温度，个位是小数位。比如寄存器的值为256，实际温度为25.6℃"},
-    //     {"REG_2F_PRESSURE_Pa", "40004", "2", "float", "0", "当前压力，单位pa"},
-    //     {"REG_2F_PRESSURE_UNIT", "40006", "2", "float", "0", "当前压力，单位由压力单位寄存器决定"},
-    //     {"REG_1I_SEN_INNERCODE", "40009", "1", "uint16", "0", "传感器内码"},
-    //     {"REG_1I_I_OUTPUT_uA", "40008", "1", "uint16", "0", "当前电流,单位uA"},
-    //     {"REG_1U_I_PWM", "40010", "1", "uint16", "0", "电流输出对应的PWM"},
-    //     {"REG_1U_I_STATE", "40011", "1", "uint16", "0", "状态寄存器"},
-    //     {"REG_1U_CALIB_DATA_CMD", "40012", "1", "uint16", "0", "0x30:置零；0xAD53:保存电流标定参数；0x8D73:保存传感器标定参数；0x9D63:清除传感器标定参数；0xCD43:清除电流标定参数；0x4253:退出其他模式，进入变送模式"},
-    //     {"REG_1U_SYS_CMD", "40014", "1", "uint16", "0", "系统命令：0x52AD 重启，0x46B9 清除某模式"},
-    //     {"REG_1U_TRANS_CMD" ,"40015",  "1","uint16","0","变送命令"},
-    //     {"DEVICE_ID", "40016", "1", "uint16", "0", "设备站号"},
-    //     {"REG_1U_COM_BAUDE", "40017", "1", "uint16", "0", "波特率"},
-    //     {"REG_1U_SEN_UNIT", "40018", "1", "uint16", "0", "压力单位"},
-    //     {"REG_1U_TRANS_MODE", "40019", "1", "uint16", "0", "变送模式，0,4~20mA    1,0V~5V     2,0V~10V       3,0~20mA"},
-    //     {"REG_2F_TRANS_STAR_Pa", "40023", "2", "float", "0", "变送器变送零点气压，单位pa"},
-    //     {"REG_2F_TRANS_FSC_Pa", "40025", "2", "float", "0", "变送器变送满度气压，单位pa"},
-    //     {"REG_1U_ZERO_RANGE_01Pa", "40027", "1", "uint16", "0", "零点归零范围设置，在此范围内，变送输出电流均为零点电流(单位0.1Pa）"},
-    //     {"REG_1U_VI_OUTPUT_MIN_uA", "40021", "1", "uint16", "0", "电流输出最小值"},
-    //     {"REG_1U_VI_OUTPUT_MAX_uA", "40022", "1", "uint16", "0", "电流输出最大值"},
-    //     {"REG_1U_VI_Trans_Start_uAmV", "40030", "1", "uint16", "0", "变送输出起点信号"},
-    //     {"REG_1U_VI_Trans_FSC_uAmV", "40032", "1", "uint16", "0", "变送输出满度信号"},
-    //     {"REG_1U_BACK_LIGHT_SET", "40033", "1", "uint16", "0", "背光工作模式设置"},
-    //     {"REG_1U_SensorType", "40097", "1", "uint16", "0", "传感器型号"},
-    //     {"REG_2I_SensorMin_code", "40098", "2", "int32", "0", "数字传感器最小内码值"},
-    //     {"REG_2I_SensorMax_code", "40100", "2", "int32", "0", "数字传感器满度内码值"},
-    //     {"REG_2F_SensorMinVal_cmH2O", "40102", "2", "float", "0", "传感器最小输出值，零点值  (单位:cmH2O)"},
-    //     {"REG_2F_SensorMaxVal_cmH2O", "40104", "2", "float", "0", "传感器最大输出值，满量程值 (单位:cmH2O)"},
-    //     {"REG_2F_SensorMinVal_Pa", "40106", "2", "float", "0", "传感器最小输出值，零点值  (单位:Pa)"},
-    //     {"REG_2F_SensorMaxVal_Pa", "40108", "2", "float", "0", "传感器最大输出值，零点值  (单位:Pa)"},
-    //     {"REG_1U_I_Calib_flg", "40064", "1", "uint16", "0", "电流校准标志， I_CALIBRATE_FLG"},
-    //     {"REG_1U_I_CalibPointNum", "40065", "1", "uint16", "0", "电流标定点数"},
-    //     {"REG_1U_PWM", "40040", "1", "uint16", "0", "设置PWM占空比,输入参数0~100"},
-    //     {"REG_1U_I_Calib1_CurVal", "40041", "1", "uint16", "0", "电流输出校准点1电流"},
-    //     {"REG_1U_I_Calib2_CurVal", "40042", "1", "uint16", "0", "电流输出校准点2电流"},
-    //     {"REG_1U_I_Calib3_CurVal", "40043", "1", "uint16", "0", "电流输出校准点3电流"},
-    //     {"REG_1U_I_Calib4_CurVal", "40044", "1", "uint16", "0", "电流输出校准点4电流"},
-    //     {"REG_1U_I_Calib5_CurVal", "40045", "1", "uint16", "0", "电流输出校准点5电流"},
-    //     {"REG_2U_I_Calib1_PWM_Val", "40066", "2", "uint32", "0", "电流输出校准点1对应的PWM定时器计数值"},
-    //     {"REG_2U_I_Calib2_PWM_Val", "40068", "2", "uint32", "0", "电流输出校准点2对应的PWM定时器计数值"},
-    //     {"REG_2U_I_Calib3_PWM_Val", "40070", "2", "uint32", "0", "电流输出校准点3对应的PWM定时器计数值"},
-    //     {"REG_2U_I_Calib4_PWM_Val", "40072", "2", "uint32", "0", "电流输出校准点4对应的PWM定时器计数值"},
-    //     {"REG_2U_I_Calib5_PWM_Val", "40074", "2", "uint32", "0", "电流输出校准点5对应的PWM定时器计数值"},
-    //     {"REG_1U_sensorCalib_flg", "40079", "1", "uint16", "0", ""},
-    //     {"REG_1U_sensorCalibPointNum", "40080", "1", "uint16", "0", "传感器标定点数量"},
-    //     {"REG_2F_sensor_Calib1_Pa", "40050", "2", "float", "0", "传感器标定1"},
-    //     {"REG_2F_sensor_Calib2_Pa", "40052", "2", "float", "0", "传感器标定2"},
-    //     {"REG_2F_sensor_Calib3_Pa", "40054", "2", "float", "0", "传感器标定3"},
-    //     {"REG_2F_sensor_Calib4_Pa", "40056", "2", "float", "0", "传感器标定4"},
-    //     {"REG_2F_sensor_Calib5_Pa", "40058", "2", "float", "0", "传感器标定5"},
-    //     {"REG_2I_sensor_0Pa_innercode", "40081", "2", "int32", "0", "传感器变送两点偏移量"},
-    //     {"REG_2I_sensor_1Pa_innercode", "40083", "2", "int32", "0", ""},
-    //     {"REG_2I_sensor_2Pa_innercode", "40085", "2", "int32", "0", ""},
-    //     {"REG_2I_sensor_3Pa_innercode", "40087", "2", "int32", "0", ""},
-    //     {"REG_2I_sensor_4Pa_innercode", "40089", "2", "int32", "0", ""},
-    //     {"REG_2I_sensor_5Pa_innercode", "40091", "2", "int32", "0", ""},
-    //     {"REG_2I_TransZero_InnerCode", "40093", "1", "uint16", "0", ""},
-    //     {"REG_2I_TransFSC_InnerCode", "40095", "1", "uint16", "0", ""},
-    //     {"REG_1U_init_flg1", "40200", "1", "uint16", "0", "初始化标志"},
-    //     {"REG_1U_init_flg2", "40201", "1", "uint16", "0", "数据结构校验和"},
-    //     };
 
     QMap<QString, QString> sensorListMap;
     QMap<QString, QString> voltageSensorListMap;
@@ -194,11 +134,11 @@ public:
         *LineEditTemprature         = nullptr,
 
         // 电压传感器特有
-        *LineEditPoint              = nullptr,
-        *LineEditCheck              = nullptr;
+        *LineEditPoint              = nullptr;
 
     QComboBox *ComboBoxBaud         = nullptr,
-        *ComboBoxTransmissionMethod = nullptr;
+        *ComboBoxTransmissionMethod = nullptr,
+        *ComboBoxCheck              = nullptr;
 
     QTimer sensorSerialDelayTimer;
 
@@ -210,9 +150,13 @@ public:
 
     QTimer waitingResponseTimer;
 
-    QEventLoop loop;
-
     QQueue<std::function<void()>> functionQueue;
+
+    QByteArray data;        // 全局缓冲数据
+
+    QString receDeviceID;       // 写设备地址会冲突，此值为读到的值
+
+    int decimalPoint;
 
     void serialRefreshInit();
 
@@ -224,8 +168,6 @@ public:
 
     void sensorSerialDelay();
 
-    void sensorSerialRead();
-
     void multimeterSerialDelay();
 
     void multimeterSerialRead();
@@ -233,6 +175,8 @@ public:
     void barographSerialRead();
 
     void interfaceInit();
+
+    void regInit();
 
     void delay(int time);
 
@@ -389,7 +333,20 @@ private slots:
 
     void on_pushButton_54_clicked();
 
+    void on_btn_send_clicked();
+
+    void on_lineEdit_42_textEdited(const QString &arg1);
+
+    void on_lineEdit_43_textEdited(const QString &arg1);
+
+    void on_lineEdit_44_textEdited(const QString &arg1);
+
+    void on_lineEdit_45_textEdited(const QString &arg1);
+
+    void on_pushButton_8_clicked();
+
 private:
+
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
