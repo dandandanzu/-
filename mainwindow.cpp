@@ -21,7 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     serialRefreshInit();        // 刷新全部串口
     interfaceInit();        // 界面初始化
-    regInit();      // 寄存器信息显示
+    //regInit();      // 寄存器信息显示
+    pushButtonInit();       // 按钮状态初始化
     connect(&sensorSerial, &QSerialPort::readyRead, this, &MainWindow::sensorSerialDelay);      // 传感器串口接收槽函数
 
     // 万用表串口接收槽函数
@@ -735,7 +736,7 @@ void MainWindow::barographSerialRead()
 void MainWindow::interfaceInit()
 {
     // 上位机标题
-    this->setWindowTitle("微雀微压差变送器测试工具V3.0");
+    this->setWindowTitle("微雀微压差变送器测试工具V3.2");
     ui->tabWidget->setCurrentIndex(0);
 
     // 超时次数为0
@@ -783,6 +784,13 @@ void MainWindow::interfaceInit()
     buttonList = {
         ui->pushButton_27, ui->pushButton_30, ui->pushButton_31, ui->pushButton_51, ui->pushButton_52, ui->pushButton_102,
         ui->pushButton_53, ui->pushButton_106, ui->pushButton_105, ui->pushButton_104, ui->pushButton_103
+    };
+
+    // 电流标定按钮初始化, 未加读取参数
+    currCaliButtonList = {
+        ui->pushButton_38, ui->pushButton_39, ui->pushButton_40, ui->pushButton_41, ui->pushButton_42, ui->pushButton_48,
+        ui->pushButton_46, ui->pushButton_45, ui->pushButton_44, ui->pushButton_47, ui->pushButton_43, ui->pushButton_50,
+        ui->pushButton_25,
     };
 
     // 传感器Map初始化
@@ -1006,6 +1014,25 @@ void MainWindow::regInit()
     QVBoxLayout* layout = new QVBoxLayout(thirdPage);
     layout->addWidget(table);
     thirdPage->setLayout(layout);
+}
+
+void MainWindow::pushButtonInit()
+{
+    // 传感器按钮列表
+    for (QPushButton *btn : buttonList) {
+        pushButtonDisEnable(btn);
+    };
+
+    // 电流标定按钮列表
+    for (QPushButton *btn : currCaliButtonList) {
+        pushButtonDisEnable(btn);
+    };
+
+    // 参数配置按钮
+    pushButtonDisEnable(ui->pushButton_13);
+    pushButtonDisEnable(ui->pushButton_15);
+    pushButtonDisEnable(ui->pushButton_17);
+    pushButtonDisEnable(ui->pushButton_19);
 }
 
 // 延时函数
@@ -1251,8 +1278,7 @@ void MainWindow::on_pushButton_2_clicked()
         }      
         // 开启自动出队定时器
         autoDequeueTimer.start(10);
-    }
-    else {
+    } else {
         sensorSerial.close();
         sensorSerialOpen = false;
         ui->pushButton_2->setText("打开");
@@ -1265,7 +1291,7 @@ void MainWindow::on_pushButton_2_clicked()
         ui->pushButton_108->setStyleSheet("");
         ui->pushButton_109->setStyleSheet("");
         for (QPushButton *btn : buttonList) {
-            btn->setStyleSheet("");
+            pushButtonDisEnable(btn);
         };
         ui->comboBox->setEnabled(true);
         ui->pushButton->setEnabled(true);
@@ -1490,6 +1516,11 @@ void MainWindow::on_pushButton_36_clicked()
 // 一键读取
 void MainWindow::on_pushButton_37_clicked()
 {
+    // 传感器按钮初始化
+    for (QPushButton *btn : buttonList) {
+        pushButtonDisEnable(btn);
+    };
+
     // 自动出队会异常关闭，在这里打开一下
     if (autoDequeueTimer.isActive()) {
 
@@ -3407,7 +3438,7 @@ void MainWindow::setTransmissionMethod(QPushButton *button)
     ui->pushButton_28->setStyleSheet("");
     ui->pushButton_29->setStyleSheet("");
     for (QPushButton *btn : buttonList) {
-        btn->setStyleSheet("");
+        pushButtonDisEnable(btn);
     };
 
     // 变送方式
@@ -3583,9 +3614,11 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
 
         // 电流标定修改
         ui->label_31->setText("           0~100   内码   uA");
-        ui->pushButton_26->setStyleSheet("background-color: #00BFFF;");
+        ui->pushButton_26->setStyleSheet("background-color: #00BFFF;");     // 蓝色
         ui->pushButton_28->setStyleSheet("");
         ui->pushButton_29->setStyleSheet("");
+        pushButtonDisEnable(ui->pushButton_13);
+        pushButtonDisEnable(ui->pushButton_15);
     } else if (arg1 == "1") {   // 0V~5V
         // 参数配置修改
         // ui->pushButton_35->show();
@@ -3619,6 +3652,10 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         ui->pushButton_28->setStyleSheet("background-color: #00BFFF;");
         ui->pushButton_26->setStyleSheet("");
         ui->pushButton_29->setStyleSheet("");
+
+        // 按钮失效
+        pushButtonEnable(ui->pushButton_13);
+        pushButtonEnable(ui->pushButton_15);
     } else if (arg1 == "2") {  // 0V~10V
         // 参数配置修改
         // ui->pushButton_35->show();
@@ -3651,6 +3688,10 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         ui->pushButton_29->setStyleSheet("background-color: #00BFFF;");
         ui->pushButton_28->setStyleSheet("");
         ui->pushButton_26->setStyleSheet("");
+
+        // 按钮使能
+        pushButtonEnable(ui->pushButton_13);
+        pushButtonEnable(ui->pushButton_15);
     }
 }
 
@@ -3663,6 +3704,18 @@ void MainWindow::queueClear()
     ui->pushButton_33->setEnabled(true);
     ui->pushButton_49->setEnabled(true);
     ui->pushButton_75->setEnabled(true);
+}
+
+void MainWindow::pushButtonDisEnable(QPushButton *button)
+{
+    button->setStyleSheet("background-color: #808080;");        // 灰色
+    button->setEnabled(false);
+}
+
+void MainWindow::pushButtonEnable(QPushButton *button)
+{
+    button->setStyleSheet("");
+    button->setEnabled(true);
 }
 
 // 选择变送方式为4mA~20mA
