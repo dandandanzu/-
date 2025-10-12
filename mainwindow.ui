@@ -1786,6 +1786,9 @@ border: none;  /* 去掉边框 */}
          </widget>
         </widget>
         <widget class="QGroupBox" name="groupBox_6">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -5308,31 +5311,56 @@ QPlainTextEdit:hover {
      </layout>
     </item>
     <item row="1" column="0">
-     <widget class="QPushButton" name="pushButton_54">
+     <widget class="QGroupBox" name="groupBox_8">
       <property name="minimumSize">
        <size>
         <width>110</width>
-        <height>30</height>
+        <height>40</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>99</width>
-        <height>35</height>
+        <width>110</width>
+        <height>40</height>
        </size>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>13</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
+      <property name="title">
        <string/>
       </property>
-      <property name="text">
-       <string>连接设备</string>
-      </property>
+      <widget class="QPushButton" name="pushButton_54">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>10</y>
+         <width>110</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>110</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>99</width>
+         <height>35</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string/>
+       </property>
+       <property name="text">
+        <string>连接设备</string>
+       </property>
+      </widget>
      </widget>
     </item>
     <item row="2" column="0">

@@ -859,6 +859,35 @@ void MainWindow::interfaceInit()
     for (auto it = baudMap.constBegin(); it != baudMap.constEnd(); ++it) {
         ui->comboBox_6->addItem(it.key());  // 显示型号，绑定ID
     }
+
+    // 1010把电流上下限的读写按钮隐藏,使用hide方法会导致控件错位问题，把高度设置为0可以实现按钮隐藏
+    // ui->pushButton_16->setFixedHeight(0);
+    // ui->pushButton_17->setFixedHeight(0);
+    // ui->pushButton_18->setFixedHeight(0);
+    // ui->pushButton_19->setFixedHeight(0);
+
+    // ui->pushButton_38->setDisabled(true);      // 电流标定失能
+    // ui->pushButton_39->setDisabled(true);
+    // ui->pushButton_40->setDisabled(true);
+    // ui->pushButton_41->setDisabled(true);
+    // ui->pushButton_42->setDisabled(true);
+    // ui->pushButton_43->setDisabled(true);
+    // ui->pushButton_44->setDisabled(true);
+    // ui->pushButton_45->setDisabled(true);
+    // ui->pushButton_46->setDisabled(true);
+    // ui->pushButton_47->setDisabled(true);
+    // ui->pushButton_48->setDisabled(true);
+    // ui->pushButton_50->setDisabled(true);
+
+    // ui->pushButton_69->setDisabled(true);      // 传感器标定失能
+    // ui->pushButton_70->setDisabled(true);
+    // ui->pushButton_71->setDisabled(true);
+    // ui->pushButton_72->setDisabled(true);
+    // ui->pushButton_73->setDisabled(true);
+    // ui->pushButton_74->setDisabled(true);
+    // ui->pushButton_76->setDisabled(true);
+
+    // ui->pushButton_25->setDisabled(true);       // 一键标定失能
 }
 
 void MainWindow::regInit()
@@ -3559,8 +3588,11 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         ui->pushButton_29->setStyleSheet("");
     } else if (arg1 == "1") {   // 0V~5V
         // 参数配置修改
-        ui->pushButton_35->show();
-        ui->pushButton_36->show();
+        // ui->pushButton_35->show();
+        // ui->pushButton_36->show();
+        ui->pushButton_35->hide();      // 1010隐藏
+        ui->pushButton_36->hide();      // 1010隐藏
+
         ui->lineEdit_16->show();
         ui->pushButton_23->show();
         ui->label_16->show();
@@ -3589,8 +3621,10 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         ui->pushButton_29->setStyleSheet("");
     } else if (arg1 == "2") {  // 0V~10V
         // 参数配置修改
-        ui->pushButton_35->show();
-        ui->pushButton_36->show();
+        // ui->pushButton_35->show();
+        // ui->pushButton_36->show();
+        ui->pushButton_35->hide();      // 1010隐藏
+        ui->pushButton_36->hide();      // 1010隐藏
         ui->lineEdit_16->show();
         ui->pushButton_23->show();
         ui->label_16->show();
@@ -3678,8 +3712,10 @@ void MainWindow::on_pushButton_28_clicked()
     // 参数配置修改
     ui->lineEdit_12->setText("2000");
 
-    ui->pushButton_35->show();
-    ui->pushButton_36->show();
+    // ui->pushButton_35->show();
+    // ui->pushButton_36->show();
+    ui->pushButton_35->hide();      // 1010隐藏
+    ui->pushButton_36->hide();      // 1010隐藏
     ui->lineEdit_16->show();
     ui->pushButton_23->show();
 
@@ -3718,8 +3754,10 @@ void MainWindow::on_pushButton_29_clicked()
 {
     ui->lineEdit_12->setText("2000");
 
-    ui->pushButton_35->show();
-    ui->pushButton_36->show();
+    // ui->pushButton_35->show();
+    // ui->pushButton_36->show();
+    ui->pushButton_35->hide();      // 1010隐藏
+    ui->pushButton_36->hide();      // 1010隐藏
     ui->lineEdit_16->show();
     ui->pushButton_23->show();
 
