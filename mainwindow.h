@@ -60,7 +60,7 @@ public:
 
     int timeoutTimes, errValueTimes;
 
-    QList<QPushButton*> buttonList;
+    QList<QPushButton*> buttonList, currCaliButtonList, sensCaliButtonList;
 
     struct RegisterInfo {
         QString name;
@@ -178,6 +178,8 @@ public:
 
     void regInit();
 
+    void pushButtonInit();
+
     void delay(int time);
 
     void autoScan();
@@ -191,6 +193,10 @@ public:
     void currentTransmissionMethod(const QString &arg1);
 
     void queueClear();
+
+    void pushButtonDisEnable(QPushButton *button);
+
+    void pushButtonEnable(QPushButton *button);
 
 private slots:
     void on_pushButton_clicked();
