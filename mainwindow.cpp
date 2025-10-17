@@ -566,7 +566,7 @@ void MainWindow::sensorSerialDelay()
         } else if (data.length() > 8) {
             appendToTextEdit(Receive, "", "接收数据长度异常");
         }
-    } else if (static_cast<quint8>(data[1]) == 0x84 || static_cast<quint8>(data[1]) == 0x85) {
+    } else if (static_cast<quint8>(data[1]) == 0x84 || static_cast<quint8>(data[1]) == 0x85 || static_cast<quint8>(data[1]) == 0x83) {
         if (data.length() == 5) {
             if (isSetBtn) {
                 isSetBtn = false;
