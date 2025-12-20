@@ -3478,6 +3478,9 @@ void MainWindow::setTransmissionMethod(QPushButton *button)
             appendToTextEdit(Write, "电流/电压上限", ui->lineEdit_10->text());
             serialWrite(Portsensor, "0016", hexStr);
         });
+
+        // 标定框名称更改
+        ui->groupBox_6->setTitle("电流标定");
     } else if (button->text() == "0V~5V") {
         functionQueue.enqueue([this]() {
             ui->pushButton_28->setStyleSheet("background-color: #00BFFF;");
@@ -3514,6 +3517,9 @@ void MainWindow::setTransmissionMethod(QPushButton *button)
             appendToTextEdit(Write, "电流/电压上限", ui->lineEdit_10->text());
             serialWrite(Portsensor, "0022", hexStr);
         });
+
+        // 标定框名称更改
+        ui->groupBox_6->setTitle("电压标定");
     } else if (button->text() == "0V~10V") {
         functionQueue.enqueue([this]() {
             ui->pushButton_29->setStyleSheet("background-color: #00BFFF;");
@@ -3550,6 +3556,9 @@ void MainWindow::setTransmissionMethod(QPushButton *button)
             appendToTextEdit(Write, "电流/电压上限", ui->lineEdit_10->text());
             serialWrite(Portsensor, "0022", hexStr);
         });
+
+        // 标定框名称更改
+        ui->groupBox_6->setTitle("电压标定");
     }
 
     // 读取变送方式
@@ -3619,6 +3628,9 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         ui->pushButton_29->setStyleSheet("");
         pushButtonDisEnable(ui->pushButton_13);
         pushButtonDisEnable(ui->pushButton_15);
+
+        // 标定框名称更改
+        ui->groupBox_6->setTitle("电流标定");
     } else if (arg1 == "1") {   // 0V~5V
         // 参数配置修改
         // ui->pushButton_35->show();
@@ -3656,6 +3668,9 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         // 按钮失效
         pushButtonEnable(ui->pushButton_13);
         pushButtonEnable(ui->pushButton_15);
+
+        // 标定框名称更改
+        ui->groupBox_6->setTitle("电压标定");
     } else if (arg1 == "2") {  // 0V~10V
         // 参数配置修改
         // ui->pushButton_35->show();
@@ -3692,6 +3707,9 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         // 按钮使能
         pushButtonEnable(ui->pushButton_13);
         pushButtonEnable(ui->pushButton_15);
+
+        // 标定框名称更改
+        ui->groupBox_6->setTitle("电压标定");
     }
 }
 
