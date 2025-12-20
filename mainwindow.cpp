@@ -3586,6 +3586,9 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         ui->pushButton_26->setStyleSheet("background-color: #00BFFF;");
         ui->pushButton_28->setStyleSheet("");
         ui->pushButton_29->setStyleSheet("");
+
+        // 标定框名称更改
+        ui->groupBox_6->setTitle("电流标定");
     } else if (arg1 == "1") {   // 0V~5V
         // 参数配置修改
         // ui->pushButton_35->show();
@@ -3619,6 +3622,9 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         ui->pushButton_28->setStyleSheet("background-color: #00BFFF;");
         ui->pushButton_26->setStyleSheet("");
         ui->pushButton_29->setStyleSheet("");
+
+        // 标定框名称更改
+        ui->groupBox_6->setTitle("电压标定");
     } else if (arg1 == "2") {  // 0V~10V
         // 参数配置修改
         // ui->pushButton_35->show();
@@ -3651,6 +3657,9 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         ui->pushButton_29->setStyleSheet("background-color: #00BFFF;");
         ui->pushButton_28->setStyleSheet("");
         ui->pushButton_26->setStyleSheet("");
+
+        // 标定框名称更改
+        ui->groupBox_6->setTitle("电压标定");
     }
 }
 
@@ -3704,6 +3713,9 @@ void MainWindow::on_pushButton_26_clicked()
     ui->lineEdit_30->setText("75");
     ui->lineEdit_31->setText("85");
     setTransmissionMethod(ui->pushButton_26);
+
+    // 标定框名称更改
+    ui->groupBox_6->setTitle("电流标定");
 }
 
 // 选择变送方式为0V~5V
@@ -3747,6 +3759,9 @@ void MainWindow::on_pushButton_28_clicked()
     ui->lineEdit_30->setText("50");
     ui->lineEdit_31->setText("70");
     setTransmissionMethod(ui->pushButton_28);
+
+    // 标定框名称更改
+    ui->groupBox_6->setTitle("电压标定");
 }
 
 // 选择变送方式为0V~10V
@@ -3789,6 +3804,9 @@ void MainWindow::on_pushButton_29_clicked()
     ui->lineEdit_30->setText("50");
     ui->lineEdit_31->setText("70");
     setTransmissionMethod(ui->pushButton_29);
+
+    // 标定框名称更改
+    ui->groupBox_6->setTitle("电压标定");
 }
 
 // 读小数点位

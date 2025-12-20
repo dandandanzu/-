@@ -4870,15 +4870,21 @@ QPushButton:pressed { background-color: #673AB7; }</string>
         <widget class="QPushButton" name="pushButton_11">
          <property name="geometry">
           <rect>
-           <x>780</x>
+           <x>690</x>
            <y>10</y>
-           <width>130</width>
+           <width>210</width>
            <height>38</height>
           </rect>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>210</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
-           <width>200</width>
+           <width>210</width>
            <height>16777215</height>
           </size>
          </property>
@@ -4898,13 +4904,13 @@ QPushButton:hover { background-color: #7E57C2; }
 QPushButton:pressed { background-color: #673AB7; }</string>
          </property>
          <property name="text">
-          <string>变送模式</string>
+          <string>变送模式(保存)</string>
          </property>
         </widget>
         <widget class="QPushButton" name="pushButton_10">
          <property name="geometry">
           <rect>
-           <x>610</x>
+           <x>520</x>
            <y>10</y>
            <width>130</width>
            <height>38</height>
