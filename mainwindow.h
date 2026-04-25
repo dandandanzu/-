@@ -58,6 +58,8 @@ public:
     bool setpressureUnit      = false;
     bool isSetBtn             = false;
 
+    bool isKPa                 = false;  // 初始为Pa
+
     int timeoutTimes, errValueTimes;
 
     QList<QPushButton*> buttonList, currCaliButtonList, sensCaliButtonList;
@@ -350,6 +352,8 @@ private slots:
     void on_lineEdit_45_textEdited(const QString &arg1);
 
     void on_pushButton_8_clicked();
+
+    void on_pushButton_55_clicked();
 
 private:
 

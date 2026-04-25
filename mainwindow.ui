@@ -12,7 +12,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>1315</width>
+    <width>43</width>
     <height>954</height>
    </size>
   </property>
@@ -5317,56 +5317,31 @@ QPlainTextEdit:hover {
      </layout>
     </item>
     <item row="1" column="0">
-     <widget class="QGroupBox" name="groupBox_8">
+     <widget class="QPushButton" name="pushButton_54">
       <property name="minimumSize">
        <size>
         <width>110</width>
-        <height>40</height>
+        <height>30</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>110</width>
-        <height>40</height>
+        <width>99</width>
+        <height>35</height>
        </size>
       </property>
-      <property name="title">
+      <property name="font">
+       <font>
+        <pointsize>13</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
        <string/>
       </property>
-      <widget class="QPushButton" name="pushButton_54">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>10</y>
-         <width>110</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>110</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>99</width>
-         <height>35</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>13</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string/>
-       </property>
-       <property name="text">
-        <string>连接设备</string>
-       </property>
-      </widget>
+      <property name="text">
+       <string>连接设备</string>
+      </property>
      </widget>
     </item>
     <item row="2" column="0">
@@ -5400,6 +5375,9 @@ QPlainTextEdit:hover {
        </property>
        <property name="text">
         <string>间隔(ms)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEdit_8">
@@ -5484,6 +5462,9 @@ QPlainTextEdit:hover {
        </property>
        <property name="text">
         <string>串口校验位</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
       <widget class="QComboBox" name="comboBox_4">
@@ -5577,16 +5558,47 @@ QPlainTextEdit:hover {
      </widget>
     </item>
     <item row="4" column="0">
-     <widget class="QSplitter" name="splitter_5">
+     <widget class="QSplitter" name="splitter_10">
       <property name="minimumSize">
        <size>
-        <width>94</width>
-        <height>75</height>
+        <width>110</width>
+        <height>110</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>110</width>
+        <height>115</height>
        </size>
       </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
+      <widget class="QLabel" name="label_34">
+       <property name="minimumSize">
+        <size>
+         <width>110</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>95</width>
+         <height>35</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>小数点位</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
       <widget class="QLineEdit" name="lineEdit_16">
        <property name="minimumSize">
         <size>
@@ -5610,31 +5622,62 @@ QPlainTextEdit:hover {
         <string/>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_23">
-       <property name="minimumSize">
-        <size>
-         <width>110</width>
-         <height>30</height>
-        </size>
+      <widget class="QSplitter" name="splitter_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>99</width>
-         <height>35</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>13</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string/>
-       </property>
-       <property name="text">
-        <string>小数点位</string>
-       </property>
+       <widget class="QPushButton" name="pushButton_23">
+        <property name="minimumSize">
+         <size>
+          <width>43</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>99</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string/>
+        </property>
+        <property name="text">
+         <string>读</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_55">
+        <property name="minimumSize">
+         <size>
+          <width>43</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>99</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string/>
+        </property>
+        <property name="text">
+         <string>写</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>
