@@ -22,6 +22,12 @@
     <height>16777215</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <family>NSimSun</family>
+    <pointsize>-1</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -152,252 +158,76 @@ QComboBox:focus {
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="0" column="0">
-     <widget class="QSplitter" name="splitter_2">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
+    <item row="2" column="0">
+     <widget class="QSplitter" name="splitter_4">
       <property name="minimumSize">
        <size>
-        <width>110</width>
-        <height>450</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>110</width>
-        <height>430</height>
+        <width>94</width>
+        <height>110</height>
        </size>
       </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QLabel" name="label_14">
        <property name="minimumSize">
         <size>
-         <width>95</width>
-         <height>140</height>
+         <width>110</width>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>110</width>
-         <height>140</height>
+         <width>75</width>
+         <height>30</height>
         </size>
        </property>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
-         <bold>true</bold>
         </font>
        </property>
-       <property name="title">
-        <string>传感器串口</string>
+       <property name="text">
+        <string>间隔(ms)</string>
        </property>
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>93</y>
-          <width>75</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>75</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>打开</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>60</y>
-          <width>75</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>75</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>刷新</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBox">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>27</y>
-          <width>75</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>75</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-         </font>
-        </property>
-       </widget>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
       </widget>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QLineEdit" name="lineEdit_8">
        <property name="minimumSize">
         <size>
-         <width>95</width>
-         <height>140</height>
+         <width>110</width>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>110</width>
-         <height>140</height>
+         <width>94</width>
+         <height>35</height>
         </size>
        </property>
        <property name="font">
         <font>
+         <family>NSimSun</family>
          <pointsize>13</pointsize>
-         <bold>true</bold>
         </font>
        </property>
-       <property name="title">
-        <string>万用表串口</string>
+       <property name="text">
+        <string>1000</string>
        </property>
-       <widget class="QComboBox" name="comboBox_2">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>27</y>
-          <width>75</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>75</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-         </font>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_4">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>95</y>
-          <width>75</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>75</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>打开</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_3">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>61</y>
-          <width>75</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>75</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>刷新</string>
-        </property>
-       </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QPushButton" name="pushButton_22">
        <property name="minimumSize">
         <size>
-         <width>95</width>
-         <height>140</height>
+         <width>110</width>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>110</width>
-         <height>140</height>
+         <width>99</width>
+         <height>35</height>
         </size>
        </property>
        <property name="font">
@@ -406,110 +236,65 @@ QComboBox:focus {
          <bold>true</bold>
         </font>
        </property>
-       <property name="title">
-        <string>气压仪串口</string>
+       <property name="styleSheet">
+        <string/>
        </property>
-       <widget class="QComboBox" name="comboBox_3">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>27</y>
-          <width>75</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>75</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-         </font>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_5">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>61</y>
-          <width>75</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>75</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>75</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>刷新</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_6">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>95</y>
-          <width>75</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>75</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>75</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>打开</string>
-        </property>
-       </widget>
+       <property name="text">
+        <string>扫描设备</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="groupBox_8">
+      <property name="minimumSize">
+       <size>
+        <width>110</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>110</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <widget class="QPushButton" name="pushButton_54">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>10</y>
+         <width>110</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>110</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>99</width>
+         <height>35</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string/>
+       </property>
+       <property name="text">
+        <string>连接设备</string>
+       </property>
       </widget>
      </widget>
     </item>
@@ -5239,113 +5024,383 @@ QPushButton:pressed { background-color: #673AB7; }</string>
       </widget>
      </widget>
     </item>
-    <item row="0" column="2" rowspan="5">
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QPushButton" name="pushButton_7">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>35</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>35</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>15</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton:pressed {
-    background-color: rgba(0, 255, 0);       /* 按下时变绿 */
-}</string>
-        </property>
-        <property name="text">
-         <string>清除全部</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QPlainTextEdit" name="plainTextEdit">
-        <property name="minimumSize">
-         <size>
-          <width>256</width>
-          <height>855</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Consolas</family>
-          <pointsize>-1</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPlainTextEdit {
-    background-color: #004B23;      /* 深墨绿色，柔和一点 */
-    color: #FFEA00;                 /* 亮黄色，带点暖意 */
-    border: 2px solid #A9A9A9;     /* 中灰色边框 */
-    border-radius: 6px;             /* 圆角 */
-    padding: 6px;                   /* 内边距 */
-    font-weight: bold;              /* 粗体字体 */
-    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;, monospace; /* 等宽字体 */
-    font-size: 14px;                /* 字号适中 */
-}
-
-QPlainTextEdit:hover {
-    border-color: #FFD700;          /* 鼠标悬停时边框金黄色 */
-}
-</string>
-        </property>
-        <property name="plainText">
-         <string>         监测数据</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="0">
-     <widget class="QGroupBox" name="groupBox_8">
+    <item row="0" column="0">
+     <widget class="QSplitter" name="splitter_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
         <width>110</width>
-        <height>40</height>
+        <height>450</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>110</width>
-        <height>40</height>
+        <height>430</height>
        </size>
       </property>
-      <property name="title">
-       <string/>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QPushButton" name="pushButton_54">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>10</y>
-         <width>110</width>
-         <height>30</height>
-        </rect>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="minimumSize">
+        <size>
+         <width>95</width>
+         <height>140</height>
+        </size>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>110</width>
+         <height>140</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="title">
+        <string>传感器串口</string>
+       </property>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="geometry">
+         <rect>
+          <x>17</x>
+          <y>93</y>
+          <width>75</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>打开</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton">
+        <property name="geometry">
+         <rect>
+          <x>17</x>
+          <y>60</y>
+          <width>75</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>刷新</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBox">
+        <property name="geometry">
+         <rect>
+          <x>17</x>
+          <y>27</y>
+          <width>75</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+         </font>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="minimumSize">
+        <size>
+         <width>95</width>
+         <height>140</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>110</width>
+         <height>140</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="title">
+        <string>万用表串口</string>
+       </property>
+       <widget class="QComboBox" name="comboBox_2">
+        <property name="geometry">
+         <rect>
+          <x>17</x>
+          <y>27</y>
+          <width>75</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+         </font>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_4">
+        <property name="geometry">
+         <rect>
+          <x>17</x>
+          <y>95</y>
+          <width>75</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>打开</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="geometry">
+         <rect>
+          <x>17</x>
+          <y>61</y>
+          <width>75</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>刷新</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="minimumSize">
+        <size>
+         <width>95</width>
+         <height>140</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>110</width>
+         <height>140</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="title">
+        <string>气压仪串口</string>
+       </property>
+       <widget class="QComboBox" name="comboBox_3">
+        <property name="geometry">
+         <rect>
+          <x>17</x>
+          <y>27</y>
+          <width>75</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+         </font>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_5">
+        <property name="geometry">
+         <rect>
+          <x>17</x>
+          <y>61</y>
+          <width>75</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>刷新</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_6">
+        <property name="geometry">
+         <rect>
+          <x>17</x>
+          <y>95</y>
+          <width>75</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>打开</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QSplitter" name="splitter_10">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>110</height>
+       </size>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QLabel" name="label_34">
        <property name="minimumSize">
         <size>
          <width>110</width>
-         <height>30</height>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -5357,52 +5412,19 @@ QPlainTextEdit:hover {
        <property name="font">
         <font>
          <pointsize>13</pointsize>
-         <bold>true</bold>
         </font>
        </property>
-       <property name="styleSheet">
-        <string/>
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
        </property>
        <property name="text">
-        <string>连接设备</string>
+        <string>小数点位</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QSplitter" name="splitter_4">
-      <property name="minimumSize">
-       <size>
-        <width>94</width>
-        <height>110</height>
-       </size>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <widget class="QLabel" name="label_14">
-       <property name="minimumSize">
-        <size>
-         <width>110</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>75</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>13</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>间隔(ms)</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="lineEdit_8">
+      <widget class="QLineEdit" name="lineEdit_16">
        <property name="minimumSize">
         <size>
          <width>110</width>
@@ -5422,34 +5444,71 @@ QPlainTextEdit:hover {
         </font>
        </property>
        <property name="text">
-        <string>1000</string>
+        <string/>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_22">
+      <widget class="QSplitter" name="splitter_5">
        <property name="minimumSize">
         <size>
          <width>110</width>
-         <height>30</height>
+         <height>0</height>
         </size>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>99</width>
-         <height>35</height>
-        </size>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="font">
-        <font>
-         <pointsize>13</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string/>
-       </property>
-       <property name="text">
-        <string>扫描设备</string>
-       </property>
+       <widget class="QPushButton" name="pushButton_23">
+        <property name="minimumSize">
+         <size>
+          <width>43</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>43</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string/>
+        </property>
+        <property name="text">
+         <string>读</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_55">
+        <property name="minimumSize">
+         <size>
+          <width>43</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>43</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string/>
+        </property>
+        <property name="text">
+         <string>写</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -5484,6 +5543,9 @@ QPlainTextEdit:hover {
        </property>
        <property name="text">
         <string>串口校验位</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
       <widget class="QComboBox" name="comboBox_4">
@@ -5576,67 +5638,82 @@ QPlainTextEdit:hover {
       </widget>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QSplitter" name="splitter_5">
-      <property name="minimumSize">
-       <size>
-        <width>94</width>
-        <height>75</height>
-       </size>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <widget class="QLineEdit" name="lineEdit_16">
-       <property name="minimumSize">
-        <size>
-         <width>110</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>94</width>
-         <height>35</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>NSimSun</family>
-         <pointsize>13</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_23">
-       <property name="minimumSize">
-        <size>
-         <width>110</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>99</width>
-         <height>35</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>13</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string/>
-       </property>
-       <property name="text">
-        <string>小数点位</string>
-       </property>
-      </widget>
-     </widget>
+    <item row="0" column="2" rowspan="5">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QPushButton" name="pushButton_7">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>15</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:pressed {
+    background-color: rgba(0, 255, 0);       /* 按下时变绿 */
+}</string>
+        </property>
+        <property name="text">
+         <string>清除全部</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPlainTextEdit" name="plainTextEdit">
+        <property name="minimumSize">
+         <size>
+          <width>256</width>
+          <height>855</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Consolas</family>
+          <pointsize>-1</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPlainTextEdit {
+    background-color: #004B23;      /* 深墨绿色，柔和一点 */
+    color: #FFEA00;                 /* 亮黄色，带点暖意 */
+    border: 2px solid #A9A9A9;     /* 中灰色边框 */
+    border-radius: 6px;             /* 圆角 */
+    padding: 6px;                   /* 内边距 */
+    font-weight: bold;              /* 粗体字体 */
+    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;, monospace; /* 等宽字体 */
+    font-size: 14px;                /* 字号适中 */
+}
+
+QPlainTextEdit:hover {
+    border-color: #FFD700;          /* 鼠标悬停时边框金黄色 */
+}
+</string>
+        </property>
+        <property name="plainText">
+         <string>         监测数据</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
