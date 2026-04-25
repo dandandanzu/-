@@ -247,12 +247,14 @@ void MainWindow::sensorSerialDelay()
                 if (pressureUnit) {                     // 读取压力单位
                     if (static_cast<quint8>(data[4]) == 0x01) {
                         ui->lineEdit_6->setText("kPa");
+                        isKPa = true;
                         ui->pushButton_108->setStyleSheet("");
                         ui->pushButton_109->setStyleSheet("background-color: #00BFFF");
                         decimalPoint = 4;
                         pressureUnit = false;
                     } else {
                         ui->lineEdit_6->setText("Pa");
+                        isKPa = false;
                         ui->pushButton_108->setStyleSheet("background-color: #00BFFF");
                         ui->pushButton_109->setStyleSheet("");
                         decimalPoint = 1;
@@ -548,17 +550,33 @@ void MainWindow::sensorSerialDelay()
                 receDeviceID = QString::number(static_cast<quint8>(data[5]));
                 isDeviceID = false;
             } else if (setpressureUnit) {
-                functionQueue.dequeue();        // 先把写压力单位的队列清掉
+                if (!functionQueue.isEmpty()) {     // // 先把写压力单位的队列清掉
+                    functionQueue.dequeue();
+                }
                 QTimer::singleShot(100, [=]{
                     if (!isVoltageSensor) {
                         functionQueue.enqueue([this]() {
                             pressureUnit = true;
                             serialRead(Portsensor, "0012", "01");
                         });
+
+                        functionQueue.enqueue([this]() {
+                            ui->lineEdit_16->setText("");
+                            LineEditPoint = ui->lineEdit_16;
+                            serialRead(Portsensor, "0021", "01");
+                            appendToTextEdit(Read, "小数点位", "");
+                        });
                     } else {
                         functionQueue.enqueue([this]() {
                             pressureUnit = true;
                             serialRead(Portsensor, "0002", "01");
+                        });
+
+                        functionQueue.enqueue([this]() {
+                            ui->lineEdit_16->setText("");
+                            LineEditPoint = ui->lineEdit_16;
+                            serialRead(Portsensor, "0021", "01");
+                            appendToTextEdit(Read, "小数点位", "");
                         });
                     }
                 });
@@ -754,8 +772,6 @@ void MainWindow::interfaceInit()
     // 0Pa校正不显示
     ui->pushButton_35->hide();
     ui->pushButton_36->hide();
-    ui->lineEdit_16->hide();
-    ui->pushButton_23->hide();
 
     // 电流标定的占空比显示
     ui->lineEdit_27->setText("17");
@@ -1623,14 +1639,6 @@ void MainWindow::on_pushButton_37_clicked()
             appendToTextEdit(Read, "波特率", "");
         });
 
-        // 读小数点位
-        functionQueue.enqueue([this]() {
-            ui->lineEdit_16->setText("");
-            LineEditPoint = ui->lineEdit_16;
-            serialRead(Portsensor, "0003", "01");
-            appendToTextEdit(Read, "小数点位", "");
-        });
-
         // 温度
         ui->lineEdit_4->setText("####");
 
@@ -1671,6 +1679,14 @@ void MainWindow::on_pushButton_37_clicked()
             serialRead(Portsensor, "0002", "01");
         });
     }
+
+    // 读小数点位
+    functionQueue.enqueue([this]() {
+        ui->lineEdit_16->setText("");
+        LineEditPoint = ui->lineEdit_16;
+        serialRead(Portsensor, "0021", "01");
+        appendToTextEdit(Read, "小数点位", "");
+    });
 
     // 读取传感器变送起点Pa
     functionQueue.enqueue([this]() {
@@ -3599,8 +3615,6 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         // 参数配置修改
         ui->pushButton_35->hide();
         ui->pushButton_36->hide();
-        ui->lineEdit_16->hide();
-        ui->pushButton_23->hide();
         ui->label_16->hide();
         ui->comboBox_4->hide();
         ui->pushButton_24->hide();
@@ -3638,8 +3652,6 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         ui->pushButton_35->hide();      // 1010隐藏
         ui->pushButton_36->hide();      // 1010隐藏
 
-        ui->lineEdit_16->show();
-        ui->pushButton_23->show();
         ui->label_16->show();
         ui->comboBox_4->show();
         ui->pushButton_24->show();
@@ -3677,8 +3689,6 @@ void MainWindow::currentTransmissionMethod(const QString &arg1)
         // ui->pushButton_36->show();
         ui->pushButton_35->hide();      // 1010隐藏
         ui->pushButton_36->hide();      // 1010隐藏
-        ui->lineEdit_16->show();
-        ui->pushButton_23->show();
         ui->label_16->show();
         ui->comboBox_4->show();
         ui->pushButton_24->show();
@@ -3739,13 +3749,8 @@ void MainWindow::pushButtonEnable(QPushButton *button)
 // 选择变送方式为4mA~20mA
 void MainWindow::on_pushButton_26_clicked()
 {
-    // 隐藏校正数据
-    ui->lineEdit_12->setText("1000");
-
     ui->pushButton_35->hide();
     ui->pushButton_36->hide();
-    ui->lineEdit_16->hide();
-    ui->pushButton_23->hide();
 
     ui->label_9 ->setText("电流下限(uA)");
     ui->label_10->setText("电流上限(uA)");
@@ -3781,14 +3786,11 @@ void MainWindow::on_pushButton_26_clicked()
 void MainWindow::on_pushButton_28_clicked()
 {
     // 参数配置修改
-    ui->lineEdit_12->setText("2000");
 
     // ui->pushButton_35->show();
     // ui->pushButton_36->show();
     ui->pushButton_35->hide();      // 1010隐藏
     ui->pushButton_36->hide();      // 1010隐藏
-    ui->lineEdit_16->show();
-    ui->pushButton_23->show();
 
     ui->label_9 ->setText("电压下限(mV)");
     ui->label_10->setText("电压上限(mV)");
@@ -3823,14 +3825,10 @@ void MainWindow::on_pushButton_28_clicked()
 // 选择变送方式为0V~10V
 void MainWindow::on_pushButton_29_clicked()
 {
-    ui->lineEdit_12->setText("2000");
-
     // ui->pushButton_35->show();
     // ui->pushButton_36->show();
     ui->pushButton_35->hide();      // 1010隐藏
     ui->pushButton_36->hide();      // 1010隐藏
-    ui->lineEdit_16->show();
-    ui->pushButton_23->show();
 
     ui->label_9 ->setText("电压下限(mV)");
     ui->label_10->setText("电压上限(mV)");
@@ -3870,13 +3868,9 @@ void MainWindow::on_pushButton_23_clicked()
         return;
     }
 
-    if (!isVoltageSensor) {
-        QMessageBox::information(this, "错误!", "请选择电压型传感器");
-        return;
-    }
     functionQueue.enqueue([this]() {
         LineEditPoint = ui->lineEdit_16;
-        serialRead(Portsensor, "0003", "01");
+        serialRead(Portsensor, "0021", "01");
         appendToTextEdit(Read, "小数点位", "");
     });
 }
@@ -4120,3 +4114,37 @@ void MainWindow::on_pushButton_8_clicked()
 {
     ui->plainTextEdit_2->clear();
 }
+
+// 写小数点位
+void MainWindow::on_pushButton_55_clicked()
+{
+    if (!sensorSerial.isOpen()) {
+        QMessageBox::information(this, "错误!", "请打开传感器串口");
+        return;
+    }
+
+    bool ok = false;
+    int a = ui->lineEdit_16->text().toInt(&ok);
+    if (!ok) {
+        QMessageBox::critical(this, "错误", "请输入整数的小数位数");
+        return;
+    }
+
+    const int maxDecimals = isKPa ? 3 : 1;
+    if (a < 0 || a > maxDecimals) {
+        QMessageBox::critical(
+            this,
+            "错误",
+            isKPa ? "KPa时可以设定0、1、2、3位小数位"
+                  : "Pa时可以设定0、1位小数位"
+            );
+        return;
+    }
+
+    functionQueue.enqueue([this]() {
+        QString hexStr = QString("%1").arg(ui->lineEdit_16->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
+        appendToTextEdit(Write, "小数点位", ui->lineEdit_16->text());
+        serialWrite(Portsensor, "0021", hexStr);
+    });
+}
+
