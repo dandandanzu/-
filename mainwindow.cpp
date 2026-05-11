@@ -441,6 +441,11 @@ void MainWindow::sensorSerialDelay()
                         LineEditEndPointPa = nullptr;
                     } else if (LineEditPressure) {                  // 压力
                         QString valueStr1 = QString::number(floatValue, 'f', decimalPoint);  // 保留3位小数
+                        float rawValue = floatValue;
+                        if (!isVoltageSensor && isKPa) {        // 0508新增，上位机在电流状态下，显示压力值单位为KPA时，需要除以1000
+                            rawValue = rawValue / 1000.0f;
+                            valueStr1 = QString::number(rawValue, 'f', decimalPoint);
+                        }
                         LineEditPressure->setText(valueStr1);
                         LineEditPressure = nullptr;
                     } else if (LineEditSensorCalibration1) {                  // 读传感器标定点1Pa
@@ -1977,14 +1982,6 @@ void MainWindow::on_pushButton_37_clicked()
         ui->pushButton_37->setEnabled(true);
         // 开启自动扫描定时器
         autoScanTimer.start(ui->lineEdit_8->text().toInt());
-    });
-
-    // 读取小数点位
-    functionQueue.enqueue([this]() {
-        ui->lineEdit_16->setText("");
-        LineEditPoint = ui->lineEdit_16;
-        serialRead(Portsensor, "0021", "01");
-        appendToTextEdit(Read, "小数点位", "");
     });
 
     delay(3000);
@@ -3694,7 +3691,6 @@ void MainWindow::queueClear()
 void MainWindow::on_pushButton_26_clicked()
 {
     // 隐藏校正数据
-    ui->lineEdit_12->setText("1000");
 
     ui->pushButton_35->hide();
     ui->pushButton_36->hide();
@@ -3736,7 +3732,6 @@ void MainWindow::on_pushButton_26_clicked()
 void MainWindow::on_pushButton_28_clicked()
 {
     // 参数配置修改
-    ui->lineEdit_12->setText("2000");
 
     // ui->pushButton_35->show();
     // ui->pushButton_36->show();
@@ -3779,8 +3774,6 @@ void MainWindow::on_pushButton_28_clicked()
 // 选择变送方式为0V~10V
 void MainWindow::on_pushButton_29_clicked()
 {
-    ui->lineEdit_12->setText("2000");
-
     // ui->pushButton_35->show();
     // ui->pushButton_36->show();
     ui->pushButton_35->hide();      // 1010隐藏
