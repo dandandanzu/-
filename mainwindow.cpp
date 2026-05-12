@@ -442,6 +442,11 @@ void MainWindow::sensorSerialDelay()
                         LineEditEndPointPa = nullptr;
                     } else if (LineEditPressure) {                  // 压力
                         QString valueStr1 = QString::number(floatValue, 'f', decimalPoint);  // 保留3位小数
+                        float rawValue = floatValue;
+                        if (!isVoltageSensor && isKPa) {        // 0512新增，上位机在电流状态下，显示压力值单位为KPA时，需要除以1000
+                            rawValue = rawValue / 1000.0f;
+                            valueStr1 = QString::number(rawValue, 'f', decimalPoint);
+                        }
                         LineEditPressure->setText(valueStr1);
                         LineEditPressure = nullptr;
                     } else if (LineEditSensorCalibration1) {                  // 读传感器标定点1Pa
