@@ -290,7 +290,6 @@ void MainWindow::sensorSerialDelay()
                         appendToTextEdit(Receive, "", voltageBaudMap.key(valueStr));
                         ComboBoxBaud = nullptr;
                     }
-
                 } else if (LineEditCurrentMin) {            // 电流下限
                     LineEditCurrentMin->setText(valueStr);
                     appendToTextEdit(Receive, "", valueStr);
@@ -379,6 +378,10 @@ void MainWindow::sensorSerialDelay()
                     ComboBoxCheck->setCurrentIndex(valueStr.toInt());
                     appendToTextEdit(Receive, "", ComboBoxCheck->currentText());
                     ComboBoxCheck = nullptr;
+                } else if (LineEditCOCoefficient) {      // CO系数
+                    LineEditCOCoefficient->setText(valueStr);
+                    appendToTextEdit(Receive, "", valueStr);
+                    LineEditCOCoefficient = nullptr;
                 }
             } else if (data.length() > 7) {
                 appendToTextEdit(Receive, "", "接收数据长度异常");
@@ -468,6 +471,26 @@ void MainWindow::sensorSerialDelay()
                         LineEditSensorCalibration5->setText(valueStr);
                         appendToTextEdit(Receive, "", valueStr);
                         LineEditSensorCalibration5 = nullptr;
+                    } else if (LineEditWindSpeedMin) {      // 风速起点
+                        LineEditWindSpeedMin->setText(valueStr);
+                        appendToTextEdit(Receive, "", valueStr);
+                        LineEditWindSpeedMin = nullptr;
+                    } else if (LineEditWindSpeedMax) {      // 风速满度
+                        LineEditWindSpeedMax->setText(valueStr);
+                        appendToTextEdit(Receive, "", valueStr);
+                        LineEditWindSpeedMax = nullptr;
+                    } else if (LineEditWindSpeed) {         // 风速
+                        LineEditWindSpeed->setText(valueStr);
+                        appendToTextEdit(Receive, "", valueStr);
+                        LineEditWindSpeed = nullptr;
+                    } else if (LineEditWindVolume) {        // 风量
+                        LineEditWindVolume->setText(valueStr);
+                        appendToTextEdit(Receive, "", valueStr);
+                        LineEditWindVolume = nullptr;
+                    } else if (LineEditCrossSectionalArea) {        // 截面积
+                        LineEditCrossSectionalArea->setText(valueStr);
+                        appendToTextEdit(Receive, "", valueStr);
+                        LineEditCrossSectionalArea = nullptr;
                     }
                 } else {                                            // uint32_t先直接转化为10进制
                     valueStr = QString::number(intValue);           // 默认就是十进制
@@ -801,8 +824,8 @@ void MainWindow::interfaceInit()
 
     // 传感器按钮初始化
     buttonList = {
-        ui->pushButton_27, ui->pushButton_30, ui->pushButton_31, ui->pushButton_51, ui->pushButton_52, ui->pushButton_102,
-        ui->pushButton_53, ui->pushButton_106, ui->pushButton_105, ui->pushButton_104, ui->pushButton_103
+        ui->pushButton_27, ui->pushButton_30,  ui->pushButton_31, ui->pushButton_51,
+        ui->pushButton_52, ui->pushButton_102, ui->pushButton_53
     };
 
     // 传感器Map初始化
@@ -815,11 +838,6 @@ void MainWindow::interfaceInit()
         {"20K", "15201"},       //20K  LWLP5020DD
         {"40K", "15401"},       //40K  LWLP5040DD
         {"100K", "15111"},      //100k LWLP5100DD
-        // TE
-        {"TE_1K", "54012"},     //1K  SM9541_010C_DC3S
-        {"TE_2K", "54022"},     //2K  SM9541_020C_DC3S
-        {"TE_4K", "54042"},     //4K  SM9541_040C_DC3S
-        {"TE_10K", "54102"},    //10K SM9541_100C_DC3S
     };
 
     // 电压传感器初始化
@@ -832,11 +850,6 @@ void MainWindow::interfaceInit()
         {"20K", "4116"},       //20K  LWLP5020DD   0x1014
         {"40K", "4136"},       //40K  LWLP5040DD   0x1028
         {"100K", "4196"},      //100k LWLP5100DD   0x1064
-        // TE
-        {"TE_1K", "8449"},     //1K  SM9541_010C_DC3S  0x2101
-        {"TE_2K", "8450"},     //2K  SM9541_020C_DC3S  0x2102
-        {"TE_4K", "8452"},     //4K  SM9541_040C_DC3S  0x2104
-        {"TE_10K", "8458"},    //10K SM9541_100C_DC3S  0x210A
     };
 
     //变送方式初始化
@@ -879,35 +892,6 @@ void MainWindow::interfaceInit()
     for (auto it = baudMap.constBegin(); it != baudMap.constEnd(); ++it) {
         ui->comboBox_6->addItem(it.key());  // 显示型号，绑定ID
     }
-
-    // 1010把电流上下限的读写按钮隐藏,使用hide方法会导致控件错位问题，把高度设置为0可以实现按钮隐藏
-    // ui->pushButton_16->setFixedHeight(0);
-    // ui->pushButton_17->setFixedHeight(0);
-    // ui->pushButton_18->setFixedHeight(0);
-    // ui->pushButton_19->setFixedHeight(0);
-
-    // ui->pushButton_38->setDisabled(true);      // 电流标定失能
-    // ui->pushButton_39->setDisabled(true);
-    // ui->pushButton_40->setDisabled(true);
-    // ui->pushButton_41->setDisabled(true);
-    // ui->pushButton_42->setDisabled(true);
-    // ui->pushButton_43->setDisabled(true);
-    // ui->pushButton_44->setDisabled(true);
-    // ui->pushButton_45->setDisabled(true);
-    // ui->pushButton_46->setDisabled(true);
-    // ui->pushButton_47->setDisabled(true);
-    // ui->pushButton_48->setDisabled(true);
-    // ui->pushButton_50->setDisabled(true);
-
-    // ui->pushButton_69->setDisabled(true);      // 传感器标定失能
-    // ui->pushButton_70->setDisabled(true);
-    // ui->pushButton_71->setDisabled(true);
-    // ui->pushButton_72->setDisabled(true);
-    // ui->pushButton_73->setDisabled(true);
-    // ui->pushButton_74->setDisabled(true);
-    // ui->pushButton_76->setDisabled(true);
-
-    // ui->pushButton_25->setDisabled(true);       // 一键标定失能
 }
 
 void MainWindow::regInit()
@@ -977,6 +961,12 @@ void MainWindow::regInit()
         // 0906新增
         {"REG_1U_VI_OUTPUT_MAX_mV", "40034", "1", "uint16", "0", "电压输出最大值"},
         {"REG_2F_PRESSURE_Pa", "40035", "2", "float", "0", "压力测量值"},
+        {"", "6E", "2", "float", "0", "风速起点"},
+        {"", "70", "2", "float", "0", "风速满度"},
+        {"", "72", "1", "uint16", "0", "风速校准"},
+        {"", "73", "2", "float", "0", "风速值"},
+        {"", "75", "2", "float", "0", "风量值"},
+        {"", "77", "2", "float", "0", "截面积"},
         // 李工分辨率较低，加几个预留
         {" ", " ", " ", " ", " ", " "},
         {" ", " ", " ", " ", " ", " "},
@@ -1121,6 +1111,24 @@ void MainWindow::autoScan()
             serialRead(Portsensor, "0002", "01");
         });
     }
+
+    // 读风速
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_49->setText("");
+        LineEditWindSpeed = ui->lineEdit_49;
+        serialRead(Portsensor, "0073", "02");
+        appendToTextEdit(Read, "风速", "");
+    });
+
+    // 读风量
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_50->setText("");
+        LineEditWindVolume = ui->lineEdit_50;
+        serialRead(Portsensor, "0075", "02");
+        appendToTextEdit(Read, "风量", "");
+    });
 
     ui->pushButton_22->setStyleSheet("background-color: #00BFFF;");
     ui->pushButton_22->setText("关闭扫描");
@@ -1661,6 +1669,33 @@ void MainWindow::on_pushButton_37_clicked()
         appendToTextEdit(Read, "小数点位", "");
     });
 
+    // 读风速
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_49->setText("");
+        LineEditWindSpeed = ui->lineEdit_49;
+        serialRead(Portsensor, "0073", "02");
+        appendToTextEdit(Read, "风速", "");
+    });
+
+    // 读风量
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_50->setText("");
+        LineEditWindVolume = ui->lineEdit_50;
+        serialRead(Portsensor, "0075", "02");
+        appendToTextEdit(Read, "风量", "");
+    });
+
+    // 读截面积
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_51->setText("");
+        LineEditCrossSectionalArea = ui->lineEdit_51;
+        serialRead(Portsensor, "0077", "02");
+        appendToTextEdit(Read, "截面积", "");
+    });
+
     // 读取传感器变送起点Pa
     functionQueue.enqueue([this]() {
         isFloat = true;
@@ -1978,6 +2013,47 @@ void MainWindow::on_pushButton_37_clicked()
         LineEditSensorInternalCode5 = ui->lineEdit_66;
         serialRead(Portsensor, "005B", "02");
         appendToTextEdit(Read, "传感器标定点5内码", "");
+        // // 可以读取，从这里先注释，如果没问题就删除
+        // ui->pushButton_37->setEnabled(true);
+        // // 开启自动扫描定时器
+        // autoScanTimer.start(ui->lineEdit_8->text().toInt());
+    });
+
+    // 读截面积
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_51->setText("");
+        LineEditCrossSectionalArea = ui->lineEdit_51;
+        serialRead(Portsensor, "0077", "02");
+        appendToTextEdit(Read, "截面积", "");
+    });
+
+
+    // 读风速起点
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_46->setText("");
+        LineEditWindSpeedMin = ui->lineEdit_46;
+        serialRead(Portsensor, "006E", "02");
+        appendToTextEdit(Read, "风速起点", "");
+    });
+
+    // 读风速满度
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_47->setText("");
+        LineEditWindSpeedMax = ui->lineEdit_47;
+        serialRead(Portsensor, "0070", "02");
+        appendToTextEdit(Read, "风速满度", "");
+    });
+
+    // 读CO系数
+    functionQueue.enqueue([this]() {
+        isFloat = false;
+        ui->lineEdit_48->setText("");
+        LineEditCOCoefficient = ui->lineEdit_48;
+        serialRead(Portsensor, "0072", "01");
+        appendToTextEdit(Read, "CO系数", "");
         // 可以读取
         ui->pushButton_37->setEnabled(true);
         // 开启自动扫描定时器
@@ -2100,6 +2176,35 @@ void MainWindow::on_pushButton_33_clicked()
         LineEditEndPointPa = ui->lineEdit_26;
         serialRead(Portsensor, "0019", "02");
         appendToTextEdit(Read, "传感器变送满度（Pa）", "");
+        // ui->pushButton_33->setEnabled(true);  风速没问题了可以删除
+        // autoScanTimer.start(ui->lineEdit_8->text().toInt());
+    });
+
+    // 读风速起点
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_46->setText("");
+        LineEditWindSpeedMin = ui->lineEdit_46;
+        serialRead(Portsensor, "006E", "02");
+        appendToTextEdit(Read, "风速起点", "");
+    });
+
+    // 读风速满度
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_47->setText("");
+        LineEditWindSpeedMax = ui->lineEdit_47;
+        serialRead(Portsensor, "0070", "02");
+        appendToTextEdit(Read, "风速满度", "");
+    });
+
+    // 读CO系数
+    functionQueue.enqueue([this]() {
+        isFloat = false;
+        ui->lineEdit_48->setText("");
+        LineEditWindSpeedMin = ui->lineEdit_46;
+        serialRead(Portsensor, "0072", "01");
+        appendToTextEdit(Read, "CO系数", "");
         ui->pushButton_33->setEnabled(true);
         autoScanTimer.start(ui->lineEdit_8->text().toInt());
     });
@@ -3319,50 +3424,6 @@ void MainWindow::on_pushButton_102_clicked()
     selectSensor(ui->pushButton_102);
 }
 
-// 54012 1K
-void MainWindow::on_pushButton_106_clicked()
-{
-    ui->lineEdit_24->setText("0");
-    ui->lineEdit_26->setText("1000");
-    ui->lineEdit_67->setText("0");
-    ui->lineEdit_68->setText("500");
-    ui->lineEdit_69->setText("1000");
-    selectSensor(ui->pushButton_106);
-}
-
-// 54022 2K
-void MainWindow::on_pushButton_105_clicked()
-{
-    ui->lineEdit_24->setText("0");
-    ui->lineEdit_26->setText("2000");
-    ui->lineEdit_67->setText("0");
-    ui->lineEdit_68->setText("1000");
-    ui->lineEdit_69->setText("2000");
-    selectSensor(ui->pushButton_105);
-}
-
-// 54042 4K
-void MainWindow::on_pushButton_104_clicked()
-{
-    ui->lineEdit_24->setText("0");
-    ui->lineEdit_26->setText("4000");
-    ui->lineEdit_67->setText("0");
-    ui->lineEdit_68->setText("2000");
-    ui->lineEdit_69->setText("4000");
-    selectSensor(ui->pushButton_104);
-}
-
-// 54102 10K
-void MainWindow::on_pushButton_103_clicked()
-{
-    ui->lineEdit_24->setText("0");
-    ui->lineEdit_26->setText("10000");
-    ui->lineEdit_67->setText("0");
-    ui->lineEdit_68->setText("5000");
-    ui->lineEdit_69->setText("10000");
-    selectSensor(ui->pushButton_103);
-}
-
 // 写入Pa
 void MainWindow::on_pushButton_108_clicked()
 {
@@ -4097,6 +4158,53 @@ void MainWindow::on_pushButton_55_clicked()
         QString hexStr = QString("%1").arg(ui->lineEdit_16->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
         appendToTextEdit(Write, "小数点位", ui->lineEdit_16->text());
         serialWrite(Portsensor, "0021", hexStr);
+    });
+}
+
+// 风速配置
+void MainWindow::on_pushButton_58_clicked()
+{
+    // 写入风速起点
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        appendToTextEdit(Write, "风速起点", ui->lineEdit_46->text());
+        serialWrite(Portsensor, "006E", ui->lineEdit_46->text());
+    });
+
+    // 写入风速满度
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        appendToTextEdit(Write, "风速满度", ui->lineEdit_47->text());
+        serialWrite(Portsensor, "0070", ui->lineEdit_47->text());
+    });
+
+    // 写入CO系数
+    functionQueue.enqueue([this]() {
+        QString hexStr = QString("%1").arg(ui->lineEdit_48->text().toInt(), 2, 16, QLatin1Char('0')).toUpper();
+        appendToTextEdit(Write, "CO系数", ui->lineEdit_48->text());
+        serialWrite(Portsensor, "0072", hexStr);
+    });
+}
+
+// 读风速截面积
+void MainWindow::on_pushButton_110_clicked()
+{
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        ui->lineEdit_51->setText("");
+        LineEditCrossSectionalArea = ui->lineEdit_51;
+        appendToTextEdit(Read, "截面积(cm²)", "");
+        serialRead(Portsensor, "0077", "02");
+    });
+}
+
+// 写风速截面积
+void MainWindow::on_pushButton_111_clicked()
+{
+    functionQueue.enqueue([this]() {
+        isFloat = true;
+        appendToTextEdit(Write, "截面积(cm²)", ui->lineEdit_51->text());
+        serialWrite(Portsensor, "0077", ui->lineEdit_51->text());
     });
 }
 

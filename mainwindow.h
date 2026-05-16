@@ -136,7 +136,16 @@ public:
         *LineEditTemprature         = nullptr,
 
         // 电压传感器特有
-        *LineEditPoint              = nullptr;
+        *LineEditPoint              = nullptr,
+
+        // 风速特有
+        *LineEditWindSpeedMin       = nullptr,
+        *LineEditWindSpeedMax       = nullptr,
+        *LineEditCOCoefficient      = nullptr,
+        *LineEditWindSpeed          = nullptr,
+        *LineEditWindVolume         = nullptr,
+        *LineEditCrossSectionalArea = nullptr;
+
 
     QComboBox *ComboBoxBaud         = nullptr,
         *ComboBoxTransmissionMethod = nullptr,
@@ -309,14 +318,6 @@ private slots:
 
     void on_pushButton_102_clicked();
 
-    void on_pushButton_106_clicked();
-
-    void on_pushButton_105_clicked();
-
-    void on_pushButton_104_clicked();
-
-    void on_pushButton_103_clicked();
-
     void on_pushButton_108_clicked();
 
     void on_pushButton_109_clicked();
@@ -348,6 +349,12 @@ private slots:
     void on_pushButton_8_clicked();
 
     void on_pushButton_55_clicked();
+
+    void on_pushButton_58_clicked();
+
+    void on_pushButton_110_clicked();
+
+    void on_pushButton_111_clicked();
 
 private:
 
