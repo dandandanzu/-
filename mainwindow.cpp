@@ -9,6 +9,7 @@
 #include <QTabWidget>
 #include <QTableWidgetItem>
 #include "crc.h"
+#include <QHeaderView>
 
 #define SecondByte_06   0x06
 #define LengthByte_00   0x00
@@ -780,7 +781,7 @@ void MainWindow::barographSerialRead()
 void MainWindow::interfaceInit()
 {
     // 上位机标题
-    this->setWindowTitle("微雀微压差变送器测试工具V3.0");
+    this->setWindowTitle("微雀风速风量变送器测试工具V1.0");
     ui->tabWidget->setCurrentIndex(0);
 
     // 超时次数为0
@@ -2027,7 +2028,6 @@ void MainWindow::on_pushButton_37_clicked()
         serialRead(Portsensor, "0077", "02");
         appendToTextEdit(Read, "截面积", "");
     });
-
 
     // 读风速起点
     functionQueue.enqueue([this]() {
